@@ -1,0 +1,61 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+
+# Virtual environments / Conda
+.venv/
+venv/
+env/
+ENV/
+.env
+.env.*
+!.env.example
+.conda/
+
+# Build and packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+pip-wheel-metadata/
+
+# Jupyter / notebooks
+.ipynb_checkpoints/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and runtime outputs
+*.log
+logs/
+runtime/
+artifacts/
+
+# Local game/runtime data
+*.sqlite
+*.sqlite3
+*.db
+saves/
+
+# Coverage / reports
+coverage.xml
+junit.xml
+reports/
