@@ -1,0 +1,42 @@
+{
+  "schema_version": "milestone_state.v1",
+  "artifact_type": "milestone_state",
+  "project_id": "simple-chess-python",
+  "source_of_truth": {
+    "milestones_document": "docs/milestones.md",
+    "formal_issue_source": "github"
+  },
+  "current_milestone": {
+    "id": "M1",
+    "title": "Estrutura base Python e configuração do projeto",
+    "status": "active"
+  },
+  "last_completed_milestone": "M0",
+  "completed_milestones": [
+    "M0"
+  ],
+  "locked_completed_milestones": [
+    "M0"
+  ],
+  "reopen_records": [],
+  "regression_policy": {
+    "allow_return_to_completed_milestone": false,
+    "requires_explicit_reopen_record": true
+  },
+  "validation_rules": {
+    "current_milestone_must_exist_in_milestones_document": true,
+    "current_milestone_must_not_be_completed": true,
+    "current_milestone_must_not_be_locked": true,
+    "completed_milestone_reopen_requires_record": true
+  },
+  "sic_boundary": {
+    "state": "This file records the observable operational milestone state for simple-chess-python.",
+    "intent": "Project goals and milestone planning remain in docs/milestones.md.",
+    "control": "Workflows and scripts validate this state before continuing the pipeline."
+  },
+  "notes": [
+    "M0 is treated as completed because the project is entering the implementation pipeline starting from M1.",
+    "M1 is the first technical implementation milestone according to docs/milestones.md.",
+    "This file must remain in the target project repository, not in n8n-local-stack profiles or runtime state."
+  ]
+}
