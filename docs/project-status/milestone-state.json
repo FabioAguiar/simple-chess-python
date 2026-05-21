@@ -4,19 +4,21 @@
   "project_id": "simple-chess-python",
   "source_of_truth": {
     "milestones_document": "docs/milestones.md",
-    "formal_issue_source": "github"
+    "formal_issue_source": "github",
+    "architecture_document": "docs/architecture.md",
+    "operational_state_document": "docs/project-status/milestone-state.json"
   },
   "current_milestone": {
-    "id": "M1",
+    "id": "M2",
     "title": "Estrutura base Python e configuração do projeto",
     "status": "active"
   },
-  "last_completed_milestone": "M0",
+  "last_completed_milestone": "M1",
   "completed_milestones": [
-    "M0"
+    "M1"
   ],
   "locked_completed_milestones": [
-    "M0"
+    "M1"
   ],
   "reopen_records": [],
   "regression_policy": {
@@ -27,16 +29,30 @@
     "current_milestone_must_exist_in_milestones_document": true,
     "current_milestone_must_not_be_completed": true,
     "current_milestone_must_not_be_locked": true,
-    "completed_milestone_reopen_requires_record": true
+    "completed_milestone_reopen_requires_record": true,
+    "milestones_document_is_planning_not_operational_state": true,
+    "implementation_documentation_strategy_is_not_defined_here": true
   },
   "sic_boundary": {
-    "state": "This file records the observable operational milestone state for simple-chess-python.",
-    "intent": "Project goals and milestone planning remain in docs/milestones.md.",
-    "control": "Workflows and scripts validate this state before continuing the pipeline."
+    "state": "This file records the observable operational milestone state for the target project.",
+    "intent": "Project goals, milestone planning, and implementation documentation evaluation remain in project documents such as docs/vision.md, docs/architecture.md, and docs/milestones.md.",
+    "control": "Workflows and scripts validate this state before continuing the pipeline; this file does not execute work or define workflow logic."
   },
   "notes": [
-    "M0 is treated as completed because the project is entering the implementation pipeline starting from M1.",
-    "M1 is the first technical implementation milestone according to docs/milestones.md.",
-    "This file must remain in the target project repository, not in n8n-local-stack profiles or runtime state."
-  ]
+    "This file records operational milestone state only.",
+    "M1 is marked as completed because the foundation documents were consolidated for the renewed project vision and architecture.",
+    "M1 is locked to prevent implicit regression without an explicit reopen record.",
+    "M2 is the current active milestone and should be validated against docs/milestones.md before workflow continuation.",
+    "docs/milestones.md remains the planning document and must not be treated as the operational cursor.",
+    "docs/architecture.md may define the implementation documentation strategy; this file only records milestone state.",
+    "Issues, handoffs, workflows, and scripts may use this state as input for validation, but must not infer authorization to implement from this file alone.",
+    "This file should remain in the target project repository, preferably at docs/project-status/milestone-state.json."
+  ],
+  "documentation_boundary": {
+    "vision_document": "docs/vision.md",
+    "architecture_document": "docs/architecture.md",
+    "milestones_document": "docs/milestones.md",
+    "implementation_documentation": "Defined by docs/architecture.md and reflected by docs/milestones.md when applicable; not decided by this state file.",
+    "state_document": "docs/project-status/milestone-state.json"
+  }
 }

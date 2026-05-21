@@ -2,499 +2,497 @@
 
 ## Finalidade
 
-Este documento registra o planejamento consolidado de milestones do projeto `simple-chess-python`.
+Este documento registra o planejamento de milestones do projeto `simple-chess-python`.
 
-O objetivo do `docs/milestones.md` é organizar a evolução planejada do projeto em capacidades verificáveis, deriváveis e proporcionais ao escopo definido em `docs/vision.md` e `docs/architecture.md`.
+O objetivo é transformar a visão renovada e a arquitetura inicial do projeto em um conjunto de capacidades planejadas, proporcionais, verificáveis e deriváveis em trabalhos futuros.
 
-Este documento serve para:
+Este documento orienta continuidade, validação, geração posterior de drafts de issues, formalização futura de issues e handoffs de implementação.
 
-- orientar continuidade do projeto;
-- apoiar validação documental e arquitetural;
-- apoiar derivação futura de drafts de issues;
-- preservar os limites definidos na visão;
-- respeitar as fronteiras arquiteturais definidas;
-- permitir que workflows externos do `n8n-local-stack` leiam o planejamento sem assumir execução automática.
-
-Este documento não substitui State operacional, não define milestone vigente, não autoriza execução automática, não gera issues formais e não publica alterações.
+Este documento não executa implementação, não publica issues, não gera drafts de issues, não define milestone vigente, não substitui State operacional e não cria mapa de implementação.
 
 ---
 
-## Regras de leitura
+## Regras de Leitura
 
-A ordem das milestones indica a sequência planejada de evolução do projeto.
-
-A ordem textual não deve ser usada como único cursor operacional. Se o workflow precisar identificar a milestone vigente, essa informação deve ser lida de um State operacional próprio, como `docs/project-status/milestone-state.json`, caso esse artefato venha a ser adotado.
-
-Issues previstas neste documento são apenas candidatas a drafts futuros. Elas não são issues formais, não representam backlog publicado e não autorizam implementação.
-
-Critérios de derivação indicam como uma milestone pode ser quebrada futuramente em drafts de issues, mas não autorizam execução, patch, commit, pull request, publicação ou alteração de State operacional.
-
-Nenhuma milestone deste documento autoriza integração runtime com o `n8n-local-stack`. O n8n deve ser tratado como orquestrador externo do processo de implementação, validação e revisão, não como parte interna do jogo.
+- Milestones representam capacidades planejadas, não microtarefas.
+- Milestones não são issues formais.
+- Issues previstas são apenas candidatas conceituais para futura derivação.
+- A ordem das milestones indica sequência lógica planejada, mas não deve ser usada isoladamente como cursor operacional.
+- A milestone vigente, quando existir, deve ser controlada por artefato próprio de State operacional, como `docs/project-status/milestone-state.json`.
+- Implementação depende de etapa posterior autorizada, como issue formal e handoff de implementação.
+- Nenhuma milestone autoriza patch, commit, pull request, publicação ou execução automática.
+- Documentação acumulativa de implementação depende de decisão arquitetural e autorização posterior.
+- Workflows externos podem apoiar implementação e validação, mas não fazem parte do runtime do jogo.
 
 ---
 
-## Relação com State operacional
+## Relação com docs/vision.md
+
+O `docs/vision.md` define a direção macro do projeto: criar um jogo simples de xadrez em Python, local, compreensível, com modo PvP local e modo PvC local contra uma IA simples.
+
+A visão orienta este planejamento ao estabelecer que o projeto deve:
+
+- permanecer pequeno e controlado;
+- permitir execução local;
+- oferecer PvP local;
+- oferecer PvC local com IA simples;
+- evitar engine competitiva;
+- evitar aplicação web e multiplayer online;
+- manter automações externas fora do runtime;
+- preservar documentação suficiente para continuidade.
+
+Este documento não transforma automaticamente todas as capacidades desejadas da visão em obrigações imediatas. Recursos opcionais, como salvamento, desfazer jogada, refinamento visual avançado e IA mais inteligente, permanecem fora do núcleo inicial salvo decisão posterior.
+
+---
+
+## Relação com docs/architecture.md
+
+O `docs/architecture.md` define as fronteiras técnicas e responsabilidades que orientam este planejamento.
+
+As milestones devem respeitar as seguintes decisões arquiteturais:
+
+- aplicação local, não web;
+- linguagem Python;
+- interface local com Pygame;
+- arquitetura modular simples em camadas leves;
+- separação entre `ui`, `app`, `domain` e `ai`;
+- uso de biblioteca de xadrez encapsulada no domínio;
+- IA aleatória como estratégia inicial;
+- humano joga de brancas no PvC inicial;
+- IA não altera diretamente o estado do jogo;
+- sem desfazer jogada na versão inicial;
+- sem salvar/carregar partida na versão inicial;
+- workflows externos fora do runtime;
+- estratégia inicial de documentação da implementação: `milestones-only`.
+
+Este documento não redefine arquitetura e não cria componentes fora das fronteiras já estabelecidas.
+
+---
+
+## Relação com State Operacional
+
+`docs/milestones.md` é planejamento.
+
+Ele não deve ser usado como State operacional do projeto e não define qual milestone está ativa.
+
+Se o projeto precisar controlar milestone vigente, esse controle deve ocorrer em artefato separado, como:
+
+```text
+docs/project-status/milestone-state.json
+```
 
 A separação esperada é:
 
 ```text
-docs/milestones.md = planejamento
+docs/vision.md = direção macro
+docs/architecture.md = fronteiras e decisões estruturais
+docs/milestones.md = planejamento de capacidades
 docs/project-status/milestone-state.json = State operacional, se adotado
-workflow/scripts/validações = Control
+issues formais = unidades de trabalho autorizadas posteriormente
+implementation_handoff = orientação operacional posterior
 runtime = execução local do jogo
 ```
 
-Este documento define capacidades planejadas.
-
-Ele não registra estado de execução, não informa qual milestone está ativa e não substitui artefatos operacionais de controle.
-
-Se o projeto ainda não possuir `milestone-state.json`, a milestone vigente deve ser controlada por State operacional próprio caso o pipeline do `n8n-local-stack` precise desse controle.
+Nenhuma milestone deste documento altera State operacional.
 
 ---
 
-## Relação com Vision e Architecture
+## Relação com Documentação da Implementação
 
-O `docs/vision.md` define o propósito macro do projeto: criar um jogo simples de xadrez em Python, local, compreensível, incremental e adequado como projeto controlado para aplicação prática do SIC e workflows do `n8n-local-stack`.
+Estratégia aplicável: `milestones-only`.
 
-O `docs/architecture.md` define as decisões estruturais iniciais:
+A arquitetura define que, no estágio inicial, o projeto não exige Implementation Map dedicado. O próprio `docs/milestones.md`, junto com `docs/vision.md`, `docs/architecture.md`, issues futuras e handoffs autorizados, deve ser suficiente para orientar continuidade.
 
-- aplicação local, não web;
-- Python como linguagem principal;
-- Pygame como interface gráfica;
-- arquitetura modular simples em camadas leves;
-- separação entre interface, aplicação e domínio;
-- uso de `python-chess` encapsulado na camada de domínio;
-- uso de `pytest` para testes;
-- uso de Ruff para lint e formatação;
-- manutenção do `n8n-local-stack` fora do runtime do jogo.
+As milestones devem avaliar documentação da implementação de forma proporcional:
 
-Este documento transforma essas decisões em planejamento de capacidades. Ele não redefine visão, não altera arquitetura e não cria escopo novo.
+- criar documentação acumulativa apenas se houver necessidade real de navegação entre módulos;
+- não criar Implementation Map por padrão;
+- não tratar mapa de implementação como changelog;
+- não tratar mapa de implementação como State operacional;
+- não substituir leitura dos arquivos reais por documentação resumida;
+- reavaliar a estratégia se o custo de contexto crescer com evolução simultânea de domínio, aplicação, IA e interface.
 
----
-
-## Relação operacional com SIC e n8n-local-stack
-
-O projeto `simple-chess-python` será usado como projeto-alvo do pipeline de workflows do `n8n-local-stack` desde as primeiras milestones de implementação.
-
-Isso significa que o pipeline poderá apoiar atividades como:
-
-- leitura dos documentos fundacionais;
-- identificação da milestone vigente a partir de State operacional próprio, se existir;
-- geração posterior de drafts de issues;
-- análise estruturada;
-- geração de State, Intent e Control quando aplicável;
-- apoio à implementação;
-- validação;
-- revisão;
-- atualização documental controlada.
-
-Essa relação é transversal às milestones.
-
-Não deve existir uma milestone final apenas para “preparar o projeto para o n8n”, pois o projeto já nasce como alvo do pipeline após a consolidação documental inicial.
-
-O `n8n-local-stack` não faz parte do runtime do jogo. O jogo deve continuar independente, executável localmente e sem dependência funcional do n8n.
+A ausência de Implementation Map não é falha enquanto a estratégia vigente for `milestones-only`.
 
 ---
 
-## Visão geral das milestones
+## Visão Geral das Milestones
 
-| Milestone | Título | Propósito | Dependências | Derivável em issues |
-|---|---|---|---|---|
-| M1 | Fundação documental e entrada no fluxo SIC/n8n | Consolidar os documentos fundacionais mínimos para orientar o projeto e permitir leitura por workflows externos | `README.md`, `docs/vision.md`, `docs/architecture.md` | Sim |
-| M2 | Estrutura base Python e configuração do projeto | Criar a fundação técnica mínima do projeto Python local | M1 | Sim |
-| M3 | Domínio de xadrez e encapsulamento do motor de regras | Criar a camada de domínio com uso encapsulado de `python-chess` | M2 | Sim |
-| M4 | Camada de aplicação e controle da partida | Criar a camada que coordena estado, seleção, movimentos e fluxo da partida | M3 | Sim |
-| M5 | Interface gráfica local com Pygame | Criar a interface local mínima para visualizar e interagir com o tabuleiro | M4 | Sim |
-| M6 | Jogabilidade local mínima | Integrar domínio, aplicação e interface em uma experiência jogável local | M5 | Sim |
-| M7 | Testes, lint e validação arquitetural | Validar comportamento central, qualidade de código e aderência às fronteiras arquiteturais | M6 | Sim |
-| M8 | Execução local documentada e fechamento da versão inicial | Consolidar documentação de uso, critérios de fechamento e evidência mínima da versão inicial | M7 | Com ressalvas |
+| Milestone | Foco | Resultado esperado | Derivável? |
+|---|---|---|---|
+| M1 | Fundação documental renovada | Visão, arquitetura e milestones alinhados à versão com PvP e PvC | Sim |
+| M2 | Estrutura base Python | Projeto organizado em estrutura modular inicial | Sim |
+| M3 | Domínio e regras do xadrez | Regras e estado do jogo encapsulados no domínio com biblioteca de xadrez | Sim |
+| M4 | Aplicação e sessão de partida | Fluxo central de partida, modos de jogo e turnos coordenados pela aplicação | Sim |
+| M5 | Interface Pygame inicial | Tabuleiro local renderizado e interação básica por mouse | Sim |
+| M6 | Modo PvP local | Dois jogadores humanos conseguem jogar localmente | Sim |
+| M7 | IA aleatória | Computador escolhe movimentos legais por estratégia aleatória isolada | Sim |
+| M8 | Modo PvC local | Jogador humano joga de brancas contra IA aleatória local | Sim |
+| M9 | Validação e aderência arquitetural | Testes e validações proporcionais cobrem domínio, aplicação, IA e fronteiras | Sim |
+| M10 | Fechamento da versão inicial | Versão inicial executável, documentada e coerente com visão e arquitetura | Com ressalvas |
 
 ---
 
-## M1 — Fundação documental e entrada no fluxo SIC/n8n
+## M1 — Fundação documental renovada
 
 ### Objetivo
 
-Consolidar a fundação documental mínima do projeto para orientar sua evolução e permitir que workflows externos do `n8n-local-stack` usem o repositório como projeto-alvo desde as primeiras etapas de implementação.
+Consolidar a fundação documental do projeto com a visão renovada de um jogo de xadrez local em Python com PvP local e PvC local contra IA simples.
 
-### Problema ou lacuna
+### Problema ou Lacuna
 
-Um projeto greenfield sem documentos fundacionais claros tende a gerar decisões implícitas, escopo instável e dificuldade de continuidade por IA ou workflow externo.
-
-Antes de iniciar implementação, o projeto precisa ter visão, arquitetura e planejamento de milestones suficientemente claros para orientar futuras derivações de issues.
+A visão anterior do projeto estava orientada a um jogo simples de xadrez, mas não fechava o escopo de modo de jogo, IA, PvC e limites de funcionalidades opcionais. Sem essa renovação documental, futuras implementações poderiam seguir interpretações divergentes.
 
 ### Contexto
 
-O projeto `simple-chess-python` nasce como um jogo simples de xadrez em Python e também como experimento controlado de aplicação da metodologia SIC.
+O projeto passou a aceitar uma complexidade mínima adicional: manter PvP local e adicionar PvC local com IA aleatória. Essa mudança exige realinhamento da visão, arquitetura e milestones antes da implementação técnica.
 
-A visão define o propósito macro e os limites do projeto. A arquitetura define as fronteiras técnicas iniciais. Este documento de milestones deve completar a fundação documental inicial.
+### Escopo Núcleo
 
-### Escopo núcleo
+- Consolidar `docs/vision.md` renovado.
+- Consolidar `docs/architecture.md` renovado.
+- Consolidar `docs/milestones.md` renovado.
+- Registrar PvP local e PvC local como núcleo da visão inicial.
+- Registrar IA aleatória como estratégia inicial.
+- Registrar limites: sem engine competitiva, sem web, sem multiplayer online, sem salvar/carregar e sem desfazer jogada na versão inicial.
+- Preservar o papel de workflows externos como apoio ao processo, não como runtime do jogo.
 
-- Consolidar `README.md`.
-- Consolidar `docs/vision.md`.
-- Consolidar `docs/architecture.md`.
-- Consolidar `docs/milestones.md`.
-- Registrar que o `n8n-local-stack` atua como orquestrador externo do processo.
-- Registrar que o n8n não faz parte do runtime do jogo.
-- Preservar separação entre visão, arquitetura, milestones, State, issues e Control.
+### Fora de Escopo
 
-### Fora de escopo
-
-- Implementar código do jogo.
-- Criar estrutura Python completa.
-- Gerar issues formais.
+- Implementar código.
+- Criar estrutura Python.
+- Criar issues formais.
 - Gerar drafts de issues.
-- Definir milestone vigente por ordem textual.
-- Criar ou alterar State operacional.
-- Integrar runtime do jogo com n8n.
-- Automatizar gameplay pelo n8n.
-- Publicar no GitHub.
+- Alterar State operacional.
+- Criar Implementation Map.
+- Criar workflow externo.
+- Publicar release.
 
-### Entregáveis esperados
+### Entregáveis Esperados
 
-- `README.md`.
-- `docs/vision.md`.
-- `docs/architecture.md`.
-- `docs/milestones.md`.
-- Registro documental claro da relação entre SIC, projeto e `n8n-local-stack`.
+- `docs/vision.md` renovado.
+- `docs/architecture.md` renovado.
+- `docs/milestones.md` renovado.
+- Coerência explícita entre visão, arquitetura e planejamento.
+
+### Documentação da Implementação
+
+- Estratégia aplicável: `milestones-only`.
+- Avaliação esperada: confirmar que a documentação fundacional é suficiente para orientar próximas etapas.
+- Documentos candidatos: não se aplica neste estágio.
+- Critério para criar: não criar documentação acumulativa nesta milestone.
+- Critério para atualizar: atualizar apenas documentos fundacionais diretamente afetados pela renovação.
+- Critério para não atualizar: não criar Implementation Map ou documentação de implementação antes de existir implementação.
 
 ### Dependências
 
 Nenhuma dependência bloqueante identificada.
 
-### Componentes afetados
+### Componentes ou Áreas Afetadas
 
 - Documentation.
 - Architecture.
 - Milestone Planning.
 - Issue Derivation.
-- Review Pipeline.
-- Project Profiles.
-- Validation.
+- Review.
 
-### Issues previstas
+### Issues Previstas ou Critérios de Derivação
 
-- Criar README inicial do projeto.
-- Criar ou revisar Vision Spec.
-- Criar ou revisar Architecture Spec.
-- Criar Milestones Document.
-- Validar consistência entre visão, arquitetura e milestones.
-
-### Critérios de derivação de issues
-
-- Separar criação/revisão de cada documento quando houver mudanças significativas.
-- Não misturar documentação fundacional com implementação de código.
-- Não gerar issue formal a partir deste documento sem etapa posterior de draft e validação.
-- Criar issue separada para validação documental se o workflow exigir evidência própria.
+- Critério: separar revisão de visão, arquitetura e milestones se houver necessidade de controle fino.
+- Possível tipo de issue: documentação fundacional.
+- Observação: nenhuma issue formal é criada por este documento.
 
 ### Definition of Done
 
-- `README.md` existe e descreve o projeto de forma compatível com a visão.
-- `docs/vision.md` existe e define propósito, escopo núcleo e fora de escopo.
-- `docs/architecture.md` existe e define fronteiras técnicas iniciais.
-- `docs/milestones.md` existe e organiza as capacidades planejadas.
-- O papel do `n8n-local-stack` está descrito como orquestração externa do processo.
-- O n8n não é tratado como dependência runtime do jogo.
-- Não há conteúdo sensível versionado.
-- O documento não define milestone vigente como State operacional.
+- A visão renovada define PvP local e PvC local.
+- A arquitetura define fronteiras entre domínio, aplicação, IA e interface.
+- As milestones refletem a nova visão e a nova arquitetura.
+- A estratégia `milestones-only` está refletida.
+- O runtime do jogo permanece independente de workflows externos.
+- Nenhum State operacional é alterado por este documento.
 
-### Evidência mínima
+### Evidência Mínima
 
-- Presença dos documentos fundacionais no repositório.
-- Revisão textual confirmando coerência entre visão, arquitetura e milestones.
-- Evidência reduzida de validação documental, quando o workflow externo exigir.
+- Presença dos documentos fundacionais renovados.
+- Revisão textual de coerência entre visão, arquitetura e milestones.
+- Ausência de conteúdo sensível ou comandos operacionais nos documentos.
 
-### Riscos e lacunas
+### Riscos e Lacunas
 
-- Risco de confundir planejamento com State operacional.
-- Risco de tratar issues previstas como backlog formal.
-- Risco de interpretar o n8n como dependência interna do jogo.
-- Risco de excesso documental antes da primeira implementação.
+- Risco de transformar documentação fundacional em plano de implementação.
+- Risco de iniciar implementação antes de fechar fronteiras de IA e PvC.
+- Risco de documentar recursos opcionais como obrigatórios.
 
-### Observações de continuidade
+### Critérios de Derivabilidade
 
-Após esta milestone, a evolução deve seguir para a fundação técnica do projeto Python.
+A milestone estará pronta para derivação quando visão, arquitetura e milestones estiverem coerentes, versionáveis e sem conflito sobre PvP, PvC, IA inicial e fora de escopo.
 
-Se o pipeline do `n8n-local-stack` precisar controlar milestone vigente, esse controle deve ocorrer em State operacional próprio, não neste documento.
+### Notas de Continuidade
+
+Após esta milestone, a próxima capacidade natural é a criação da estrutura técnica base do projeto Python.
 
 ---
 
-## M2 — Estrutura base Python e configuração do projeto
+## M2 — Estrutura base Python e organização modular
 
 ### Objetivo
 
-Criar a estrutura técnica mínima do projeto Python local, preparando o repositório para receber domínio, aplicação, interface, testes e validações futuras.
+Criar a estrutura técnica inicial do projeto Python, organizada para receber domínio, aplicação, IA, interface, testes e documentação sem misturar responsabilidades.
 
-### Problema ou lacuna
+### Problema ou Lacuna
 
-O repositório precisa deixar de ser apenas documental e passar a ter uma estrutura Python organizada, compatível com a arquitetura aprovada e adequada para evolução incremental.
-
-Sem essa base, futuras implementações podem misturar responsabilidades, dificultar testes e quebrar a separação entre interface, aplicação e domínio.
+O projeto precisa sair da fundação documental e passar a ter uma base técnica organizada. Sem essa estrutura, implementações futuras podem criar acoplamento prematuro ou dispersar responsabilidades.
 
 ### Contexto
 
-A arquitetura define uma estrutura modular simples em camadas leves, com diretórios para `app`, `domain` e `ui`.
+A arquitetura define um modelo modular simples em camadas leves. Esta milestone materializa a organização inicial sem implementar regras completas, interface jogável ou IA funcional.
 
-Esta milestone materializa apenas a base estrutural e de configuração, sem implementar regras de xadrez ou interface funcional.
+### Escopo Núcleo
 
-### Escopo núcleo
-
-- Criar estrutura inicial de diretórios sob `src/simple_chess/`.
-- Criar pacotes internos para `app`, `domain` e `ui`.
-- Criar ponto de entrada inicial do projeto, sem lógica complexa.
-- Criar `pyproject.toml` simples.
-- Declarar dependências principais previstas.
+- Criar estrutura base do pacote Python.
+- Separar áreas previstas para domínio, aplicação, IA e interface.
 - Preparar estrutura inicial de testes.
-- Manter compatibilidade com execução local.
+- Preparar configuração mínima do projeto.
+- Garantir que a organização reflita as fronteiras arquiteturais.
 
-### Fora de escopo
+### Fora de Escopo
 
-- Implementar regras completas do xadrez.
-- Implementar interface gráfica jogável.
-- Implementar fluxo de partida.
-- Criar engine própria de xadrez.
-- Criar banco de dados.
-- Criar API web.
-- Criar workflow n8n dentro deste repositório.
+- Implementar regras do xadrez.
+- Implementar interface gráfica funcional.
+- Implementar IA aleatória.
+- Implementar PvP ou PvC.
+- Criar persistência.
+- Criar workflow externo.
+- Criar Implementation Map.
 - Alterar State operacional.
-- Publicar issues formais.
 
-### Entregáveis esperados
+### Entregáveis Esperados
 
-- Estrutura `src/simple_chess/`.
-- Pacotes `app`, `domain` e `ui`.
-- Arquivos `__init__.py` necessários.
-- Arquivo de entrada inicial.
-- `pyproject.toml`.
-- Estrutura `tests/`.
-- Ajustes documentais mínimos se necessários.
+- Estrutura inicial do projeto Python.
+- Configuração mínima do projeto.
+- Estrutura inicial de testes.
+- Organização coerente com as áreas `domain`, `app`, `ai` e `ui`.
+
+### Documentação da Implementação
+
+- Estratégia aplicável: `milestones-only`.
+- Avaliação esperada: confirmar se a estrutura é simples o suficiente para ser entendida via milestones e arquitetura.
+- Documentos candidatos: não se aplica neste estágio.
+- Critério para criar: não criar documentação acumulativa apenas pela criação da estrutura base.
+- Critério para atualizar: atualizar documentação fundacional apenas se a estrutura real divergir da arquitetura.
+- Critério para não atualizar: não registrar cada arquivo criado como documentação acumulativa.
 
 ### Dependências
 
 - M1 concluída ou suficientemente validada.
-- Decisões arquiteturais iniciais disponíveis em `docs/architecture.md`.
+- Arquitetura inicial disponível.
 
-### Componentes afetados
+### Componentes ou Áreas Afetadas
 
-- Runtime.
 - Project Structure.
 - Tooling.
+- Tests.
 - Documentation.
 - Validation.
 
-### Issues previstas
+### Issues Previstas ou Critérios de Derivação
 
-- Criar estrutura base do pacote Python.
-- Criar configuração inicial do projeto em `pyproject.toml`.
-- Criar estrutura inicial de testes.
-- Validar estrutura inicial contra arquitetura.
-
-### Critérios de derivação de issues
-
-- Separar estrutura de diretórios de configuração quando isso facilitar validação.
-- Não misturar instalação/configuração com implementação de domínio.
-- Não incluir interface gráfica funcional nesta milestone.
-- Criar issue separada para ajustes documentais se a estrutura real divergir da arquitetura planejada.
+- Critério: separar estrutura de projeto de configuração se a validação exigir.
+- Possível tipo de issue: fundação técnica.
+- Observação: não misturar criação de estrutura com implementação de domínio ou interface.
 
 ### Definition of Done
 
-- A estrutura principal do projeto existe.
-- `pyproject.toml` existe e é coerente com a stack definida.
-- Os diretórios `app`, `domain` e `ui` existem.
-- A estrutura de testes existe.
-- Não há dependência runtime do n8n.
-- A estrutura respeita a separação arquitetural planejada.
-- Não há arquivos de ambiente, caches ou artefatos locais versionados indevidamente.
+- A estrutura base do projeto existe.
+- As áreas principais previstas estão representadas.
+- A configuração inicial do projeto existe.
+- A estrutura de testes está preparada.
+- A organização não mistura runtime do jogo com tooling externo.
+- A estrutura respeita a separação entre domínio, aplicação, IA e interface.
 
-### Evidência mínima
+### Evidência Mínima
 
-- Listagem reduzida da estrutura de arquivos.
-- Validação documental de aderência à arquitetura.
-- Resultado resumido de validação estrutural, se houver workflow ou script externo.
+- Listagem reduzida da estrutura criada.
+- Revisão de aderência à arquitetura.
+- Validação de que não há artefatos sensíveis ou locais indevidamente versionados.
 
-### Riscos e lacunas
+### Riscos e Lacunas
 
-- Risco de criar arquivos prematuros demais.
-- Risco de configurar ferramentas além do necessário.
-- Risco de misturar camada de aplicação com domínio antes da hora.
-- Risco de tratar ambiente Conda como fonte de decisão arquitetural.
+- Risco de criar arquivos demais antes da necessidade.
+- Risco de adotar estrutura pesada para um projeto pequeno.
+- Risco de misturar IA com domínio ou interface.
 
-### Observações de continuidade
+### Critérios de Derivabilidade
 
-Esta milestone prepara o terreno para a implementação do domínio de xadrez.
+A milestone estará pronta para derivação quando a arquitetura indicar claramente as áreas necessárias e a estrutura puder ser criada sem decidir detalhes de implementação funcional.
 
-A estrutura pode ser simplificada futuramente se algum arquivo planejado se mostrar desnecessário, desde que a decisão seja registrada.
+### Notas de Continuidade
+
+A estrutura criada deve permitir que o domínio seja implementado antes da interface e antes do PvC completo.
 
 ---
 
-## M3 — Domínio de xadrez e encapsulamento do motor de regras
+## M3 — Domínio e regras do xadrez
 
 ### Objetivo
 
-Criar a camada de domínio responsável por representar o estado central do jogo e encapsular o uso de `python-chess` como motor inicial de regras.
+Criar o domínio do jogo, responsável por representar o estado central da partida, validar movimentos e encapsular a biblioteca de xadrez.
 
-### Problema ou lacuna
+### Problema ou Lacuna
 
-O projeto precisa validar movimentos e estados do xadrez sem espalhar dependências externas pela interface ou pela camada de aplicação.
-
-Sem encapsulamento, `python-chess` pode se tornar acoplamento transversal, dificultando testes, manutenção e futura substituição ou extensão.
+O jogo precisa de uma base confiável para regras do xadrez. Implementar regras manualmente aumentaria risco e desviaria o foco do projeto. Usar a biblioteca diretamente em várias camadas também criaria acoplamento indevido.
 
 ### Contexto
 
-A arquitetura define que `python-chess` deve ser usado inicialmente para reduzir riscos nas regras do xadrez, mas deve ficar encapsulado na camada de domínio.
+A arquitetura define que a biblioteca de xadrez deve ficar encapsulada no domínio. O domínio deve proteger regras e estado central, sem depender de interface ou IA.
 
-Esta milestone implementa a base funcional do domínio, sem interface gráfica e sem fluxo completo de partida.
+### Escopo Núcleo
 
-### Escopo núcleo
-
-- Criar representação interna mínima do tabuleiro.
-- Criar abstração para movimentos.
-- Encapsular operações essenciais de `python-chess`.
-- Permitir consulta de turno atual.
-- Permitir validação de movimento.
-- Permitir aplicação de movimento válido.
-- Permitir rejeição de movimento inválido.
+- Representar estado inicial da partida.
+- Consultar turno atual.
+- Consultar movimentos legais.
+- Validar movimentos.
+- Aplicar movimentos válidos.
+- Rejeitar movimentos inválidos.
 - Expor estado básico da partida.
-- Preparar testes mínimos de domínio.
+- Encapsular a biblioteca de xadrez.
 
-### Fora de escopo
+### Fora de Escopo
 
 - Criar interface Pygame.
-- Criar controle visual de seleção.
-- Criar camada completa de aplicação.
-- Implementar manualmente todas as regras do xadrez.
-- Criar engine de IA.
+- Criar IA aleatória.
+- Criar modos PvP/PvC completos.
+- Implementar regras manualmente sem necessidade.
+- Implementar engine competitiva.
 - Implementar persistência.
-- Criar automação de gameplay pelo n8n.
-- Criar issue formal.
-- Alterar State operacional.
+- Criar análise avançada de posição.
 
-### Entregáveis esperados
+### Entregáveis Esperados
 
-- Módulos de domínio.
-- Encapsulamento de `python-chess`.
-- Abstrações internas mínimas para tabuleiro e movimento.
+- Camada de domínio funcional.
+- Encapsulamento da biblioteca de xadrez.
+- Consultas básicas de estado e movimentos.
 - Testes iniciais de domínio.
-- Documentação atualizada apenas se houver decisão relevante.
+
+### Documentação da Implementação
+
+- Estratégia aplicável: `milestones-only`.
+- Avaliação esperada: verificar se as responsabilidades do domínio continuam compreensíveis pela arquitetura e pelos testes.
+- Documentos candidatos: não se aplica neste estágio.
+- Critério para criar: considerar documentação adicional apenas se o domínio ganhar abstrações difíceis de entender por leitura direta.
+- Critério para atualizar: atualizar arquitetura se o encapsulamento da biblioteca mudar.
+- Critério para não atualizar: não criar mapa apenas para registrar funções internas.
 
 ### Dependências
 
 - M2 concluída.
-- Dependência `python-chess` declarada na configuração do projeto.
-- Fronteira `domain → python-chess` preservada.
+- Biblioteca de xadrez definida pela arquitetura.
 
-### Componentes afetados
+### Componentes ou Áreas Afetadas
 
 - Domain.
 - Runtime.
-- Validation.
 - Tests.
+- Validation.
 - Architecture.
 
-### Issues previstas
+### Issues Previstas ou Critérios de Derivação
 
-- Criar wrapper de domínio para `python-chess`.
-- Criar representação mínima de movimento.
-- Criar consultas de estado do tabuleiro.
-- Criar testes de validação de movimentos básicos.
-- Validar que `python-chess` não foi usado fora do domínio.
-
-### Critérios de derivação de issues
-
-- Separar encapsulamento do motor de regras dos testes, se necessário.
-- Não misturar domínio com interface gráfica.
-- Não implementar regras manualmente quando `python-chess` já resolver o caso inicial.
-- Criar issue específica para regra especial apenas se houver lacuna real.
+- Critério: separar encapsulamento da biblioteca de regras dos testes, se necessário.
+- Possível tipo de issue: domínio/regras.
+- Observação: a biblioteca não deve vazar para `ui` ou `ai`.
 
 ### Definition of Done
 
-- O domínio consegue representar uma partida inicial.
-- O domínio consegue validar movimento permitido.
-- O domínio rejeita movimento inválido.
-- O domínio aplica movimento válido.
-- O domínio expõe turno ou estado mínimo necessário.
-- `python-chess` permanece encapsulado na camada de domínio.
+- O domínio inicia uma partida válida.
+- O domínio expõe movimentos legais.
+- O domínio valida movimentos.
+- O domínio aplica movimentos válidos.
+- O domínio rejeita movimentos inválidos.
+- A biblioteca de xadrez permanece encapsulada.
 - Testes mínimos de domínio existem.
-- Nenhum módulo de interface depende diretamente de `python-chess`.
 
-### Evidência mínima
+### Evidência Mínima
 
-- Resultado resumido dos testes de domínio.
-- Revisão estrutural confirmando encapsulamento de `python-chess`.
-- Evidência reduzida de que a camada `domain` não depende de Pygame.
+- Resultado resumido de testes de domínio.
+- Revisão de dependências confirmando ausência de Pygame no domínio.
+- Revisão confirmando que a biblioteca de xadrez não foi espalhada por outras áreas.
 
-### Riscos e lacunas
+### Riscos e Lacunas
 
-- Risco de vazar objetos de `python-chess` para outras camadas.
-- Risco de implementar regra manual desnecessária.
-- Risco de criar abstrações demais antes da necessidade.
-- Risco de não cobrir regras especiais inicialmente.
+- Risco de vazar objetos internos da biblioteca para outras camadas.
+- Risco de duplicar regras do xadrez fora do domínio.
+- Risco de criar abstrações excessivas sobre a biblioteca.
 
-### Observações de continuidade
+### Critérios de Derivabilidade
 
-A camada de domínio deve ser estável o suficiente para ser consumida pela camada de aplicação na próxima milestone.
+A milestone estará pronta para derivação quando as operações mínimas do domínio estiverem claras: iniciar partida, consultar movimentos, validar e aplicar movimento.
 
-Regras especiais tratadas por `python-chess` podem ser expostas gradualmente conforme a aplicação precisar.
+### Notas de Continuidade
+
+O domínio deve ser estável o suficiente para ser usado pela aplicação e pela IA sem expor detalhes internos da biblioteca.
 
 ---
 
-## M4 — Camada de aplicação e controle da partida
+## M4 — Aplicação, sessão de partida e modos de jogo
 
 ### Objetivo
 
-Criar a camada de aplicação responsável por coordenar o fluxo da partida entre interface e domínio, incluindo seleção, tentativa de movimento, atualização de estado e mensagens básicas de feedback.
+Criar a camada de aplicação que coordena sessão de partida, modo de jogo, turno, jogadores e comunicação entre interface, domínio e IA.
 
-### Problema ou lacuna
+### Problema ou Lacuna
 
-O projeto precisa de uma camada intermediária que impeça a interface gráfica de controlar diretamente regras, estado interno do motor ou lógica completa da partida.
-
-Sem essa camada, a interface Pygame tende a acumular renderização, entrada do usuário, validação de movimento e estado do jogo.
+O projeto precisa de uma camada que controle o fluxo da partida sem colocar lógica de regras na interface ou lógica de sessão no domínio.
 
 ### Contexto
 
-A arquitetura define a direção de dependência `ui → app → domain → python-chess`.
+A arquitetura estabelece que a aplicação coordena o fluxo, enquanto o domínio protege regras e a IA apenas escolhe movimentos legais. Esta milestone cria a base de orquestração antes da jogabilidade completa.
 
-Após a criação do domínio, a aplicação deve coordenar intenções de movimento sem depender de detalhes de renderização.
+### Escopo Núcleo
 
-### Escopo núcleo
-
-- Criar controlador de partida.
-- Controlar seleção de casa ou peça.
+- Representar sessão de partida.
+- Representar modo de jogo PvP ou PvC.
+- Representar jogador humano e jogador computador.
+- Controlar turno atual.
 - Receber intenção de movimento.
-- Consultar domínio para validar movimento.
-- Atualizar estado após movimento válido.
-- Preservar estado após movimento inválido.
-- Expor dados necessários para a interface renderizar o tabuleiro.
-- Expor mensagens básicas de feedback.
-- Criar testes da camada de aplicação sem depender de Pygame.
+- Solicitar validação ao domínio.
+- Aplicar movimento por meio do domínio.
+- Preparar ponto de chamada para IA quando aplicável.
+- Expor estado necessário para a interface.
 
-### Fora de escopo
+### Fora de Escopo
 
-- Implementar renderização Pygame.
-- Criar assets gráficos definitivos.
-- Implementar IA adversária.
-- Implementar multiplayer.
-- Implementar persistência.
-- Criar API web.
-- Alterar regras internas de `python-chess`.
-- Criar integração runtime com n8n.
+- Implementar IA aleatória completa.
+- Implementar interface gráfica completa.
+- Implementar PvC final.
+- Implementar salvar/carregar.
+- Implementar desfazer jogada.
+- Criar engine competitiva.
+- Criar gameplay automatizado externo.
 
-### Entregáveis esperados
+### Entregáveis Esperados
 
-- Módulos da camada `app`.
-- Controlador de partida.
-- Estado de aplicação mínimo.
-- Testes da camada de aplicação.
-- Ajustes no domínio apenas se necessários para suportar a aplicação.
+- Camada de aplicação.
+- Representação de sessão de partida.
+- Representação de modos de jogo.
+- Fluxo básico de intenção de movimento.
+- Testes da aplicação sem depender da interface.
+
+### Documentação da Implementação
+
+- Estratégia aplicável: `milestones-only`.
+- Avaliação esperada: confirmar se os conceitos de sessão, modo e jogador estão claros o suficiente.
+- Documentos candidatos: não se aplica neste estágio.
+- Critério para criar: considerar documentação adicional apenas se a aplicação concentrar fluxos difíceis de reconstruir pelos testes.
+- Critério para atualizar: atualizar arquitetura se a separação entre aplicação e domínio mudar.
+- Critério para não atualizar: não criar mapa apenas para listar classes ou métodos.
 
 ### Dependências
 
 - M3 concluída.
-- Domínio capaz de validar e aplicar movimentos básicos.
-- Estrutura `app` disponível.
+- Domínio capaz de validar e aplicar movimentos.
 
-### Componentes afetados
+### Componentes ou Áreas Afetadas
 
 - Application.
 - Domain.
@@ -502,109 +500,104 @@ Após a criação do domínio, a aplicação deve coordenar intenções de movim
 - Tests.
 - Validation.
 
-### Issues previstas
+### Issues Previstas ou Critérios de Derivação
 
-- Criar controlador de jogo.
-- Criar estado de aplicação.
-- Implementar fluxo de seleção e tentativa de movimento.
-- Criar testes da aplicação sem Pygame.
-- Validar direção de dependência `app → domain`.
-
-### Critérios de derivação de issues
-
-- Separar estado da aplicação de controle de movimento, se a implementação crescer.
-- Não misturar aplicação com renderização.
-- Não acessar `python-chess` diretamente pela camada de aplicação se isso violar o encapsulamento.
-- Criar issue separada para mensagens de feedback se necessário.
+- Critério: separar sessão, modos de jogo e fluxo de movimento se houver complexidade suficiente.
+- Possível tipo de issue: camada de aplicação.
+- Observação: a aplicação não deve implementar regras do xadrez manualmente.
 
 ### Definition of Done
 
-- A aplicação consegue iniciar uma partida.
-- A aplicação consegue receber uma intenção de movimento.
-- Movimentos válidos são aplicados via domínio.
-- Movimentos inválidos são rejeitados sem corromper estado.
-- A aplicação expõe estado suficiente para a futura interface.
-- Testes da camada de aplicação existem e não dependem de Pygame.
-- A camada `app` não desenha tela.
+- A aplicação cria uma sessão de partida.
+- A aplicação registra modo PvP ou PvC.
+- A aplicação controla turno.
+- A aplicação recebe intenção de movimento.
+- A aplicação usa o domínio para validar e aplicar movimento.
+- A aplicação expõe estado para futura interface.
+- Testes de aplicação existem sem depender de Pygame.
 
-### Evidência mínima
+### Evidência Mínima
 
-- Resultado resumido dos testes de aplicação.
-- Revisão estrutural confirmando ausência de dependência com Pygame.
-- Evidência reduzida de fluxo válido e inválido de movimento.
+- Resultado resumido de testes da aplicação.
+- Revisão estrutural confirmando ausência de Pygame na aplicação.
+- Revisão confirmando que regras permanecem no domínio.
 
-### Riscos e lacunas
+### Riscos e Lacunas
 
-- Risco de a camada de aplicação duplicar regras do domínio.
-- Risco de a aplicação expor detalhes internos demais.
-- Risco de a seleção visual ser antecipada antes da interface.
-- Risco de acoplamento prematuro com Pygame.
+- Risco de a aplicação virar uma camada grande demais.
+- Risco de duplicar validação de regras na aplicação.
+- Risco de antecipar detalhes de UI.
+- Risco de acoplamento prematuro com a IA antes da estratégia estar pronta.
 
-### Observações de continuidade
+### Critérios de Derivabilidade
 
-Esta milestone prepara a criação da interface gráfica.
+A milestone estará pronta para derivação quando sessão, modos de jogo, fluxo de movimento e dependências com domínio estiverem claramente delimitados.
 
-A interface futura deve consumir a camada de aplicação, não o domínio diretamente para regras e mutações centrais.
+### Notas de Continuidade
+
+Esta milestone prepara tanto o modo PvP quanto a futura integração PvC.
 
 ---
 
-## M5 — Interface gráfica local com Pygame
+## M5 — Interface local inicial com Pygame
 
 ### Objetivo
 
-Criar uma interface gráfica local mínima com Pygame para renderizar o tabuleiro e permitir interação inicial do usuário com o jogo.
+Criar uma interface local inicial com Pygame para renderizar o tabuleiro, capturar interação por mouse e comunicar intenções à aplicação.
 
-### Problema ou lacuna
+### Problema ou Lacuna
 
-O projeto precisa deixar de ser apenas uma lógica testável e passar a oferecer uma interação visual local, coerente com a decisão arquitetural de não ser uma aplicação web.
-
-Sem uma interface mínima, o jogo ainda não cumpre a proposta de ser jogável por dois usuários no mesmo ambiente.
+O projeto precisa de uma camada visual local para tornar o jogo interativo sem transformar a interface em responsável por regras ou estado central da partida.
 
 ### Contexto
 
-A arquitetura definiu Pygame como biblioteca gráfica inicial e estabeleceu que a interface não deve decidir regras de movimento.
+A arquitetura define Pygame como interface local e interação principal por mouse. A interface deve ser simples, compreensível e desacoplada das regras.
 
-Esta milestone deve criar a camada visual sem transformar Pygame em centro da lógica do jogo.
+### Escopo Núcleo
 
-### Escopo núcleo
-
-- Criar janela Pygame.
+- Abrir janela local.
 - Renderizar tabuleiro.
 - Representar peças de forma compreensível.
-- Capturar eventos de mouse.
-- Converter cliques em coordenadas do tabuleiro.
-- Comunicar intenções de movimento à camada de aplicação.
-- Redesenhar o tabuleiro conforme estado exposto pela aplicação.
-- Exibir feedback visual ou textual mínimo.
+- Capturar cliques do usuário.
+- Converter clique em intenção de seleção ou movimento.
+- Enviar intenções para a aplicação.
+- Exibir feedback básico.
+- Permitir seleção inicial de modo de jogo de forma simples, se necessário para integração futura.
 
-### Fora de escopo
+### Fora de Escopo
 
-- Criar refinamento visual avançado.
-- Criar animações complexas.
-- Criar assets definitivos obrigatórios.
-- Implementar IA adversária.
-- Implementar multiplayer online.
-- Implementar persistência.
-- Automatizar gameplay pelo n8n.
-- Fazer testes automatizados profundos da interface gráfica.
-- Criar integração runtime com n8n.
+- Refinamento visual avançado.
+- Animações complexas.
+- Assets definitivos obrigatórios.
+- Validação de regras na interface.
+- IA.
+- Salvar/carregar.
+- Desfazer jogada.
+- Testes gráficos profundos.
 
-### Entregáveis esperados
+### Entregáveis Esperados
 
-- Módulos da camada `ui`.
-- Aplicação Pygame mínima.
-- Renderizador de tabuleiro.
-- Tratador básico de entrada.
-- Integração com a camada `app`.
-- Atualização documental se houver decisão visual relevante.
+- Interface Pygame inicial.
+- Renderização básica do tabuleiro.
+- Representação simples de peças.
+- Entrada por mouse conectada à aplicação.
+- Feedback básico ao usuário.
+
+### Documentação da Implementação
+
+- Estratégia aplicável: `milestones-only`.
+- Avaliação esperada: verificar se decisões visuais mínimas precisam ser registradas na arquitetura ou README.
+- Documentos candidatos: não se aplica neste estágio.
+- Critério para criar: criar documentação adicional apenas se a interface exigir convenções visuais não óbvias.
+- Critério para atualizar: atualizar documentação de uso quando a interface se tornar executável.
+- Critério para não atualizar: não criar mapa para detalhes gráficos simples.
 
 ### Dependências
 
-- M4 concluída.
-- Camada de aplicação capaz de fornecer estado renderizável.
-- Pygame declarado na configuração do projeto.
+- M4 concluída ou suficientemente validada.
+- Decisão de interface com Pygame consolidada.
 
-### Componentes afetados
+### Componentes ou Áreas Afetadas
 
 - UI.
 - Application.
@@ -612,456 +605,648 @@ Esta milestone deve criar a camada visual sem transformar Pygame em centro da l�
 - Documentation.
 - Validation.
 
-### Issues previstas
+### Issues Previstas ou Critérios de Derivação
 
-- Criar janela e loop principal do Pygame.
-- Criar renderização inicial do tabuleiro.
-- Criar renderização simples das peças.
-- Criar conversão de clique para coordenada.
-- Integrar UI com controlador de aplicação.
-- Validar que UI não decide regras de movimento.
-
-### Critérios de derivação de issues
-
-- Separar renderização de entrada se a implementação ficar grande.
-- Não misturar regras do xadrez com código de interface.
-- Não exigir assets gráficos sofisticados para concluir a milestone.
-- Criar issue separada para melhorias visuais opcionais.
+- Critério: separar renderização, entrada e feedback se o escopo ficar grande.
+- Possível tipo de issue: interface local.
+- Observação: a UI não deve validar regras nem acessar diretamente a biblioteca de xadrez.
 
 ### Definition of Done
 
-- A janela do jogo abre localmente.
-- O tabuleiro é exibido.
-- As peças são representadas de forma compreensível.
-- Cliques do usuário são capturados.
-- A interface envia intenções para a camada de aplicação.
-- A interface redesenha o estado após atualização.
-- A interface não valida movimentos diretamente.
-- O jogo continua sem dependência runtime do n8n.
+- A janela local abre.
+- O tabuleiro é renderizado.
+- As peças são compreensíveis.
+- Cliques são capturados.
+- A interface envia intenções à aplicação.
+- A interface não decide legalidade de movimento.
+- O jogo permanece local e não web.
 
-### Evidência mínima
+### Evidência Mínima
 
 - Registro reduzido de execução local da interface.
-- Captura ou descrição validada da tela inicial, se adotado pelo workflow.
-- Revisão estrutural confirmando separação entre `ui`, `app` e `domain`.
+- Revisão estrutural confirmando separação entre UI e regras.
+- Descrição ou captura validada da tela inicial, se adotado pelo fluxo de validação.
 
-### Riscos e lacunas
+### Riscos e Lacunas
 
-- Risco de a interface concentrar lógica de partida.
-- Risco de excesso de esforço visual antes da jogabilidade.
-- Risco de dificuldade de testar interface gráfica automaticamente.
-- Risco de acoplamento direto entre UI e `python-chess`.
+- Risco de a interface concentrar lógica de jogo.
+- Risco de excesso de tempo em refinamento visual prematuro.
+- Risco de indefinição sobre representação das peças.
+- Risco de dificuldade de teste automatizado da interface.
 
-### Observações de continuidade
+### Critérios de Derivabilidade
 
-A interface mínima deve ser suficiente para permitir a próxima milestone: jogabilidade local mínima.
+A milestone estará pronta para derivação quando a arquitetura definir interface local, responsabilidade da UI e limite contra validação de regras na interface.
 
-Melhorias visuais devem permanecer não bloqueantes, salvo se afetarem compreensão básica do jogo.
+### Notas de Continuidade
+
+A interface inicial deve ser suficiente para permitir a integração do modo PvP local.
 
 ---
 
-## M6 — Jogabilidade local mínima
+## M6 — Modo PvP local jogável
 
 ### Objetivo
 
-Integrar domínio, aplicação e interface para permitir que dois jogadores realizem uma partida simples localmente, com turnos, movimentos válidos, rejeição de movimentos inválidos e feedback básico.
+Integrar domínio, aplicação e interface para permitir que dois jogadores humanos joguem uma partida local básica.
 
-### Problema ou lacuna
+### Problema ou Lacuna
 
-Mesmo com domínio, aplicação e interface existentes, o projeto só cumpre sua visão central quando esses componentes funcionam juntos em uma experiência jogável mínima.
-
-A lacuna desta milestone é transformar componentes separados em um fluxo de jogo funcional.
+O projeto precisa demonstrar a jogabilidade humana local antes de adicionar comportamento de computador. Sem PvP funcional, o PvC ficaria dependente de uma base de partida ainda instável.
 
 ### Contexto
 
-A visão define que a conclusão macro depende de uma partida simples jogável localmente, com controle de turnos, rejeição de movimentos inválidos, capturas e tratamento básico de fim de partida conforme arquitetura.
+O PvP local é uma capacidade central da visão e serve como base natural para validar tabuleiro, movimentos, turnos, capturas e feedback.
 
-Esta milestone integra as capacidades anteriores.
+### Escopo Núcleo
 
-### Escopo núcleo
-
-- Permitir partida local para dois jogadores no mesmo ambiente.
+- Permitir que dois jogadores humanos joguem localmente.
 - Controlar alternância de turnos.
-- Permitir seleção e movimentação por clique.
-- Aplicar capturas válidas.
+- Permitir seleção e movimentação por mouse.
+- Aplicar movimentos válidos.
 - Rejeitar movimentos inválidos.
-- Exibir feedback mínimo para movimento inválido.
-- Exibir estado básico da partida.
-- Tratar xeque, xeque-mate ou encerramento conforme suporte exposto pelo domínio.
-- Manter fluxo jogável sem persistência.
+- Aplicar capturas.
+- Exibir turno atual e feedback básico.
+- Exibir estados básicos de fim de partida quando disponíveis.
 
-### Fora de escopo
+### Fora de Escopo
 
+- IA.
+- PvC.
 - Multiplayer online.
-- IA adversária.
-- Ranking.
-- Autenticação.
+- Salvar/carregar.
+- Desfazer jogada.
 - Relógio de xadrez obrigatório.
-- Salvamento e carregamento de partidas.
-- Histórico visual avançado.
-- Animações complexas.
-- Automação do gameplay pelo n8n.
-- Implementação manual completa das regras do xadrez.
+- Refinamento visual avançado.
+- Engine competitiva.
 
-### Entregáveis esperados
+### Entregáveis Esperados
 
-- Fluxo integrado de jogo local.
-- Feedback básico de jogada inválida.
-- Controle de turno funcional.
-- Captura de peças funcional.
-- Estado de fim de partida quando suportado.
-- Ajustes de integração entre `ui`, `app` e `domain`.
-- Testes adicionais onde aplicável.
+- Fluxo PvP local funcional.
+- Integração entre UI, aplicação e domínio.
+- Feedback básico de movimento inválido.
+- Controle de turno visível ou consultável.
+- Testes ou validações proporcionais do fluxo.
+
+### Documentação da Implementação
+
+- Estratégia aplicável: `milestones-only`.
+- Avaliação esperada: registrar apenas limitações relevantes do PvP na documentação de uso ou fechamento.
+- Documentos candidatos: não se aplica neste estágio.
+- Critério para criar: não criar documentação acumulativa para fluxo PvP se ele for claro por arquitetura, testes e UI.
+- Critério para atualizar: atualizar README futuramente quando houver versão executável.
+- Critério para não atualizar: não registrar cada ajuste de jogabilidade como documentação separada.
 
 ### Dependências
 
 - M5 concluída.
-- Domínio e aplicação integráveis com a interface.
-- Regras essenciais suportadas via `python-chess`.
+- Domínio e aplicação funcionais.
 
-### Componentes afetados
+### Componentes ou Áreas Afetadas
 
-- Runtime.
 - UI.
 - Application.
 - Domain.
+- Runtime.
 - Tests.
 - Validation.
 
-### Issues previstas
+### Issues Previstas ou Critérios de Derivação
 
-- Integrar fluxo completo de movimento por clique.
-- Implementar controle visual ou textual de turno.
-- Implementar feedback para movimento inválido.
-- Validar capturas e atualização de tabuleiro.
-- Validar estados de xeque ou fim de partida quando disponíveis.
-- Revisar aderência da integração às fronteiras arquiteturais.
-
-### Critérios de derivação de issues
-
-- Separar jogabilidade básica de refinamentos visuais.
-- Não misturar persistência com jogabilidade mínima.
-- Não adicionar IA adversária nesta milestone.
-- Criar issue separada para tratamento de fim de partida se o escopo crescer.
-- Não transformar validação manual em autorização automática de fechamento.
+- Critério: separar integração PvP de refinamento visual.
+- Possível tipo de issue: jogabilidade PvP.
+- Observação: correções de regras devem permanecer no domínio, não na UI.
 
 ### Definition of Done
 
-- O jogo permite dois jogadores locais.
+- Dois jogadores humanos conseguem jogar localmente.
 - O tabuleiro inicia em posição válida.
-- O jogador atual consegue mover uma peça válida.
-- O turno alterna corretamente após movimento válido.
-- Movimentos inválidos são rejeitados.
-- Capturas válidas atualizam o tabuleiro.
-- Feedback mínimo é exibido quando necessário.
-- A aplicação permanece local e não web.
-- O jogo não depende de n8n para funcionar.
+- Movimentos legais são aplicados.
+- Movimentos ilegais são rejeitados.
+- Turnos alternam corretamente.
+- Capturas são refletidas no tabuleiro.
+- Feedback básico é exibido.
+- A UI não valida regras diretamente.
 
-### Evidência mínima
+### Evidência Mínima
 
-- Registro reduzido de execução de uma sequência simples de jogadas.
+- Registro reduzido de uma sequência de jogadas PvP.
 - Resultado resumido de testes relevantes.
-- Validação visual ou descritiva de que o tabuleiro atualiza após jogada.
-- Revisão estrutural confirmando que regras continuam fora da UI.
+- Revisão de aderência às fronteiras UI, app e domain.
 
-### Riscos e lacunas
+### Riscos e Lacunas
 
-- Risco de bugs de integração entre clique, coordenada e movimento.
-- Risco de feedback insuficiente para o usuário entender erro.
-- Risco de regras especiais não serem bem expostas na interface.
-- Risco de escopo crescer para recursos opcionais antes do fechamento da jogabilidade mínima.
+- Risco de bugs na conversão de clique para casa.
+- Risco de feedback insuficiente para o usuário.
+- Risco de misturar regra de movimento com renderização.
+- Risco de antecipar PvC antes do PvP estar estável.
 
-### Observações de continuidade
+### Critérios de Derivabilidade
 
-Após esta milestone, o projeto deve ter uma versão funcional mínima.
+A milestone estará pronta para derivação quando o domínio, a aplicação e a UI já tiverem responsabilidades claras e puderem ser integrados em um fluxo humano local.
 
-As milestones seguintes devem priorizar validação, qualidade e fechamento da versão inicial, não expansão de escopo.
+### Notas de Continuidade
+
+O PvP local deve servir como base para a introdução da IA e posterior modo PvC.
 
 ---
 
-## M7 — Testes, lint e validação arquitetural
+## M7 — IA aleatória isolada
 
 ### Objetivo
 
-Consolidar testes automatizados, lint, formatação e validação de aderência arquitetural mínima para aumentar confiança na versão jogável inicial.
+Implementar a IA aleatória como módulo isolado capaz de escolher um movimento legal sem alterar diretamente o estado da partida.
 
-### Problema ou lacuna
+### Problema ou Lacuna
 
-Um jogo funcional sem validação mínima pode regredir facilmente e dificultar o uso do projeto como alvo confiável para workflows do `n8n-local-stack`.
-
-A lacuna é garantir que domínio, aplicação e estrutura mantenham comportamento verificável e fronteiras coerentes.
+O modo PvC exige que o computador escolha jogadas. Sem separar a IA, há risco de misturar comportamento do computador com regras, interface ou controle da sessão.
 
 ### Contexto
 
-A arquitetura definiu `pytest` para testes e Ruff para lint e formatação.
+A arquitetura define a IA inicial como aleatória, limitada e substituível futuramente. A IA deve apenas selecionar um movimento legal e retornar essa escolha para a aplicação.
 
-A visão também exige testes ou validações mínimas para regras centrais e documentação coerente para uso pelo pipeline externo.
+### Escopo Núcleo
 
-### Escopo núcleo
+- Criar módulo de IA.
+- Implementar estratégia aleatória.
+- Receber ou consultar movimentos legais disponíveis.
+- Escolher um movimento legal.
+- Retornar a escolha para a aplicação.
+- Garantir que a IA não altera o estado do jogo diretamente.
+- Criar testes para validar que a IA retorna apenas movimentos legais.
 
-- Criar ou ampliar testes de domínio.
-- Criar ou ampliar testes da camada de aplicação.
-- Validar movimentos básicos.
-- Validar rejeição de movimentos inválidos.
-- Validar alternância de turno.
-- Validar encapsulamento de `python-chess`.
-- Configurar ou consolidar Ruff.
-- Verificar que a UI não concentra regras do jogo.
-- Produzir evidência reduzida de validação.
+### Fora de Escopo
 
-### Fora de escopo
+- IA material.
+- Minimax.
+- Stockfish.
+- Engine competitiva.
+- Avaliação avançada de posição.
+- Aprendizado de máquina.
+- Ajuste de dificuldade.
+- Interface visual da IA.
+- PvC completo.
 
-- Testar profundamente renderização Pygame.
-- Criar suíte exaustiva de todas as regras especiais.
-- Criar CI/CD obrigatório.
-- Criar workflow n8n dentro do repositório.
-- Publicar release.
-- Criar cobertura total obrigatória.
-- Alterar State operacional.
-- Gerar issue formal.
+### Entregáveis Esperados
 
-### Entregáveis esperados
+- Módulo de IA.
+- Estratégia aleatória.
+- Testes da IA.
+- Integração mínima com aplicação apenas quando necessária para seleção de movimento.
 
-- Testes automatizados de domínio.
-- Testes automatizados de aplicação.
-- Configuração de Ruff.
-- Critérios de validação documentados ou refletidos no README.
-- Evidência reduzida de execução das validações.
-- Ajustes de código necessários para passar nas validações.
+### Documentação da Implementação
+
+- Estratégia aplicável: `milestones-only`.
+- Avaliação esperada: verificar se a separação da IA está clara o suficiente em arquitetura e testes.
+- Documentos candidatos: não se aplica neste estágio.
+- Critério para criar: considerar documentação adicional apenas se novas estratégias de IA forem adicionadas futuramente.
+- Critério para atualizar: atualizar arquitetura se a IA deixar de ser aleatória ou ganhar estratégia substituível mais complexa.
+- Critério para não atualizar: não criar mapa apenas para uma estratégia aleatória simples.
 
 ### Dependências
 
-- M6 concluída.
-- Projeto com fluxo jogável mínimo.
-- Estrutura de testes existente.
+- M4 concluída.
+- Domínio capaz de expor movimentos legais de forma segura.
 
-### Componentes afetados
+### Componentes ou Áreas Afetadas
+
+- AI.
+- Application.
+- Domain.
+- Tests.
+- Validation.
+
+### Issues Previstas ou Critérios de Derivação
+
+- Critério: separar criação da estratégia de IA dos ajustes de aplicação, se necessário.
+- Possível tipo de issue: IA simples.
+- Observação: a IA não deve conhecer Pygame nem manipular diretamente a biblioteca de xadrez se isso violar encapsulamento.
+
+### Definition of Done
+
+- A IA recebe acesso a movimentos legais.
+- A IA escolhe um movimento legal aleatório.
+- A IA retorna a escolha para a aplicação.
+- A IA não altera estado da partida diretamente.
+- Testes validam que movimentos escolhidos são legais.
+- A IA não depende da interface.
+
+### Evidência Mínima
+
+- Resultado resumido de testes da IA.
+- Revisão confirmando que a IA não altera estado diretamente.
+- Revisão confirmando independência em relação à interface.
+
+### Riscos e Lacunas
+
+- Risco de a IA acessar detalhes internos demais do domínio.
+- Risco de a IA aplicar movimento diretamente.
+- Risco de a IA aleatória gerar experiência fraca, embora aceita pela arquitetura.
+- Risco de antecipar estratégia mais inteligente sem necessidade.
+
+### Critérios de Derivabilidade
+
+A milestone estará pronta para derivação quando a arquitetura indicar claramente que a IA apenas escolhe movimentos legais e não controla o estado do jogo.
+
+### Notas de Continuidade
+
+A IA aleatória prepara a integração do modo PvC local.
+
+---
+
+## M8 — Modo PvC local
+
+### Objetivo
+
+Integrar o modo PvC local, permitindo que o jogador humano jogue de brancas contra a IA aleatória jogando de pretas.
+
+### Problema ou Lacuna
+
+O projeto precisa concretizar a segunda forma principal de jogo definida na visão. A IA isolada precisa ser coordenada pela aplicação dentro do fluxo real da partida.
+
+### Contexto
+
+A arquitetura define que o humano joga de brancas no PvC inicial. A aplicação deve chamar a IA no turno do computador e aplicar o movimento escolhido por meio do domínio.
+
+### Escopo Núcleo
+
+- Permitir seleção do modo PvC.
+- Configurar humano como brancas.
+- Configurar computador como pretas.
+- Aplicar jogada humana.
+- Detectar turno do computador.
+- Solicitar movimento à IA aleatória.
+- Aplicar movimento da IA por meio do domínio.
+- Atualizar interface após resposta da IA.
+- Preservar validação de regras no domínio.
+
+### Fora de Escopo
+
+- Escolha de cor pelo usuário.
+- Níveis de dificuldade.
+- IA material ou minimax.
+- Engine competitiva.
+- Desfazer ciclo humano + IA.
+- Salvar/carregar partida.
+- Automação de gameplay por workflow externo.
+- Multiplayer online.
+
+### Entregáveis Esperados
+
+- Modo PvC funcional.
+- Integração entre aplicação e IA.
+- Fluxo humano branco contra IA preta.
+- Feedback básico após movimento da IA.
+- Testes ou validações proporcionais do modo PvC.
+
+### Documentação da Implementação
+
+- Estratégia aplicável: `milestones-only`.
+- Avaliação esperada: registrar limitações da IA e do modo PvC em documentação de uso ou fechamento futuro.
+- Documentos candidatos: não se aplica neste estágio.
+- Critério para criar: considerar documentação adicional apenas se múltiplas estratégias de IA ou configurações forem adicionadas.
+- Critério para atualizar: atualizar README futuramente quando o modo PvC estiver disponível ao usuário.
+- Critério para não atualizar: não criar mapa apenas para a integração inicial PvC.
+
+### Dependências
+
+- M6 concluída ou suficientemente validada.
+- M7 concluída.
+
+### Componentes ou Áreas Afetadas
+
+- Application.
+- AI.
+- Domain.
+- UI.
+- Runtime.
+- Tests.
+- Validation.
+
+### Issues Previstas ou Critérios de Derivação
+
+- Critério: separar seleção de modo, chamada da IA e feedback visual se necessário.
+- Possível tipo de issue: integração PvC.
+- Observação: a aplicação, não a IA, deve aplicar movimentos no domínio.
+
+### Definition of Done
+
+- O usuário consegue iniciar uma partida PvC.
+- O humano joga de brancas.
+- A IA joga de pretas.
+- A jogada humana válida é aplicada.
+- A aplicação chama a IA no turno do computador.
+- A IA retorna movimento legal.
+- A aplicação aplica o movimento da IA via domínio.
+- A interface reflete o estado atualizado.
+- O jogo permanece local e independente de workflows externos.
+
+### Evidência Mínima
+
+- Registro reduzido de uma sequência humano → IA.
+- Resultado resumido de testes ou validações do fluxo PvC.
+- Revisão confirmando que a IA não altera estado diretamente.
+- Revisão confirmando que o humano joga de brancas no modo inicial.
+
+### Riscos e Lacunas
+
+- Risco de fluxo assíncrono ou visual confuso após jogada da IA.
+- Risco de a aplicação chamar a IA em momento incorreto.
+- Risco de falta de feedback claro para o usuário.
+- Risco de acoplamento entre IA e UI.
+
+### Critérios de Derivabilidade
+
+A milestone estará pronta para derivação quando PvP, aplicação e IA aleatória estiverem suficientemente definidos para integração.
+
+### Notas de Continuidade
+
+Após esta milestone, o projeto terá as duas formas centrais de jogo previstas na visão.
+
+---
+
+## M9 — Testes, validação e aderência arquitetural
+
+### Objetivo
+
+Consolidar testes e validações proporcionais para domínio, aplicação, IA, modos de jogo e fronteiras arquiteturais.
+
+### Problema ou Lacuna
+
+Com PvP e PvC presentes, o projeto precisa de confiança mínima contra regressões e contra acoplamento indevido entre camadas.
+
+### Contexto
+
+A arquitetura exige separação entre UI, aplicação, domínio e IA, além de garantir que a IA só escolha movimentos legais e que workflows externos permaneçam fora do runtime.
+
+### Escopo Núcleo
+
+- Testar domínio e regras básicas.
+- Testar aplicação e fluxo de turnos.
+- Testar IA aleatória como seletora de movimentos legais.
+- Validar fluxo PvP essencial.
+- Validar fluxo PvC essencial.
+- Validar fronteiras arquiteturais.
+- Validar que a biblioteca de xadrez permanece encapsulada.
+- Validar que a IA não altera estado diretamente.
+- Validar lint e formatação, se adotados.
+
+### Fora de Escopo
+
+- Teste gráfico exaustivo de Pygame.
+- Cobertura total obrigatória.
+- Testes de engine competitiva.
+- Testes de multiplayer online.
+- CI/CD obrigatório.
+- Workflow externo dentro do runtime.
+- Implementation Map obrigatório.
+
+### Entregáveis Esperados
+
+- Testes de domínio.
+- Testes de aplicação.
+- Testes de IA.
+- Validações mínimas de PvP e PvC.
+- Validação de fronteiras arquiteturais.
+- Evidência reduzida de execução das validações.
+
+### Documentação da Implementação
+
+- Estratégia aplicável: `milestones-only`.
+- Avaliação esperada: verificar se os testes e validações bastam para orientar manutenção futura.
+- Documentos candidatos: não se aplica neste estágio.
+- Critério para criar: considerar documentação acumulativa se os testes revelarem dificuldade recorrente para entender responsabilidades entre módulos.
+- Critério para atualizar: atualizar README ou documentação de validação se houver forma consolidada de verificar o projeto.
+- Critério para não atualizar: não criar Implementation Map apenas por existir suíte de testes.
+
+### Dependências
+
+- M8 concluída ou suficientemente validada.
+- Testes estruturais disponíveis desde milestones anteriores.
+
+### Componentes ou Áreas Afetadas
 
 - Tests.
 - Validation.
-- Tooling.
 - Domain.
 - Application.
+- AI.
+- UI.
+- Tooling.
 - Architecture.
-- Documentation.
 
-### Issues previstas
+### Issues Previstas ou Critérios de Derivação
 
-- Criar testes de domínio para movimentos básicos.
-- Criar testes da aplicação para fluxo de movimento.
-- Configurar Ruff.
-- Validar encapsulamento de `python-chess`.
-- Revisar aderência arquitetural das dependências.
-- Registrar evidência reduzida de validação.
-
-### Critérios de derivação de issues
-
-- Separar testes de domínio e aplicação.
-- Separar configuração de tooling da correção de falhas.
-- Não transformar evidência de validação em State operacional.
-- Não exigir teste gráfico completo para concluir a milestone.
-- Criar issue específica para cobertura adicional apenas se houver lacuna relevante.
+- Critério: separar testes de domínio, aplicação, IA e validação de fronteiras se o trabalho ficar grande.
+- Possível tipo de issue: testes e validação.
+- Observação: não transformar validação em autorização automática de execução ou publicação.
 
 ### Definition of Done
 
 - Testes essenciais de domínio existem.
 - Testes essenciais de aplicação existem.
-- Validação de movimento válido está coberta.
-- Rejeição de movimento inválido está coberta.
-- Alternância de turno está coberta.
-- Ruff está configurado.
-- A arquitetura continua respeitando `ui → app → domain → python-chess`.
-- Evidência mínima de validação foi registrada de forma reduzida e sem conteúdo sensível.
+- Testes da IA aleatória existem.
+- Fluxos PvP e PvC possuem validação proporcional.
+- Fronteiras arquiteturais são revisadas.
+- A biblioteca de xadrez permanece encapsulada no domínio.
+- A IA não altera estado diretamente.
+- Evidência mínima de validação é registrada de forma reduzida.
 
-### Evidência mínima
+### Evidência Mínima
 
 - Resultado resumido dos testes.
-- Resultado resumido da validação de lint/formatação, se executada.
-- Revisão reduzida de dependências entre camadas.
-- Registro sanitizado de validação, se usado pelo pipeline externo.
+- Resultado resumido de lint/formatação, se adotado.
+- Revisão reduzida de fronteiras entre módulos.
+- Registro sanitizado de validação, se usado por workflow externo.
 
-### Riscos e lacunas
+### Riscos e Lacunas
 
+- Risco de testes frágeis por dependerem de detalhes internos.
 - Risco de baixa cobertura para regras especiais.
-- Risco de testes frágeis por dependerem demais de detalhes internos.
-- Risco de transformar validações externas em fonte de verdade do projeto.
-- Risco de excesso de tooling para um projeto pequeno.
+- Risco de validação insuficiente do fluxo PvC.
+- Risco de confundir evidência de workflow com fonte de verdade.
 
-### Observações de continuidade
+### Critérios de Derivabilidade
 
-Esta milestone aumenta a confiança na versão inicial e prepara o fechamento documental e operacional da primeira versão.
+A milestone estará pronta para derivação quando os principais fluxos e fronteiras já existirem e puderem ser testados sem inventar novo escopo funcional.
 
-Validações futuras podem ser orquestradas pelo `n8n-local-stack`, mas os resultados não devem substituir documentação, issues ou State operacional.
+### Notas de Continuidade
+
+Esta milestone prepara o fechamento da versão inicial e reduz risco de regressão em futuras melhorias.
 
 ---
 
-## M8 — Execução local documentada e fechamento da versão inicial
+## M10 — Fechamento da versão inicial
 
 ### Objetivo
 
-Consolidar a versão inicial do projeto como aplicação local executável, documentada e coerente com visão, arquitetura e milestones.
+Consolidar a versão inicial do projeto como jogo local executável, documentado, com PvP local, PvC local com IA aleatória e limites conhecidos registrados.
 
-### Problema ou lacuna
+### Problema ou Lacuna
 
-Após a implementação e validação da jogabilidade mínima, o projeto precisa de fechamento claro para que humanos, IA e workflows externos entendam o que foi entregue, o que ficou fora do escopo e quais capacidades futuras podem ser derivadas.
-
-Sem esse fechamento, o projeto pode continuar expandindo sem critério ou confundir recursos opcionais com pendências obrigatórias.
+Após implementação e validação das capacidades centrais, o projeto precisa de fechamento claro para evitar expansão indefinida de escopo e para orientar futuras melhorias sem confundir opcionais com pendências obrigatórias.
 
 ### Contexto
 
-A visão define uma Definition of Done macro para a versão central do projeto.
+A visão define uma versão simples, local e compreensível. A arquitetura define fronteiras e decisões iniciais. Esta milestone consolida o estado inicial entregue e registra limitações.
 
-A arquitetura define critérios de aderência, incluindo execução local, separação entre interface e regras, encapsulamento de `python-chess`, testes mínimos e independência em relação ao n8n.
+### Escopo Núcleo
 
-Esta milestone consolida o fechamento da versão inicial sem criar uma integração runtime com n8n.
-
-### Escopo núcleo
-
-- Revisar README para refletir estado real da versão inicial.
-- Documentar forma de uso em linguagem descritiva, sem transformar este documento em manual de comandos.
+- Revisar documentação de uso em alto nível.
 - Registrar capacidades entregues.
 - Registrar limitações conhecidas.
-- Registrar escopo não implementado.
+- Confirmar PvP local.
+- Confirmar PvC local com IA aleatória.
+- Confirmar humano como brancas no PvC inicial.
+- Confirmar ausência de salvar/carregar.
+- Confirmar ausência de desfazer jogada.
+- Confirmar independência do runtime em relação a workflows externos.
 - Confirmar aderência à visão e arquitetura.
-- Confirmar que o jogo é executável localmente.
-- Confirmar que o n8n permanece externo ao runtime.
 
-### Fora de escopo
+### Fora de Escopo
 
 - Publicar release obrigatória.
 - Criar instalador.
 - Criar pacote distribuível complexo.
+- Adicionar novas funcionalidades.
+- Implementar IA material.
+- Implementar salvar/carregar.
+- Implementar desfazer jogada.
 - Criar CI/CD obrigatório.
-- Criar integração runtime com n8n.
-- Automatizar gameplay.
-- Adicionar recursos opcionais como histórico, desfazer, salvar/carregar ou IA adversária.
-- Gerar issues formais automaticamente.
+- Criar Implementation Map sem nova decisão.
 - Alterar State operacional.
 
-### Entregáveis esperados
+### Entregáveis Esperados
 
-- README revisado.
-- Documentação de capacidades entregues.
+- Documentação de uso revisada.
+- Registro de capacidades entregues.
 - Registro de limitações conhecidas.
 - Evidência reduzida de execução local.
 - Evidência reduzida de validação.
-- Revisão de aderência a `vision.md`, `architecture.md` e `milestones.md`.
+- Revisão de aderência à visão e arquitetura.
+
+### Documentação da Implementação
+
+- Estratégia aplicável: `milestones-only`.
+- Avaliação esperada: reavaliar se a estratégia ainda é suficiente após a versão inicial.
+- Documentos candidatos: possível documentação acumulativa futura apenas se houver custo real de contexto.
+- Critério para criar: criar Implementation Map somente em rodada posterior se manutenção entre módulos se tornar difícil.
+- Critério para atualizar: atualizar README e documentos fundacionais conforme comportamento real da versão inicial.
+- Critério para não atualizar: não criar mapa como changelog ou checklist de fechamento.
 
 ### Dependências
 
-- M7 concluída.
-- Versão jogável mínima validada.
-- Documentação fundacional existente.
+- M9 concluída.
+- Versão inicial validada de forma proporcional.
 
-### Componentes afetados
+### Componentes ou Áreas Afetadas
 
 - Documentation.
 - Runtime.
 - Validation.
-- Review Pipeline.
+- Review.
 - Issue Derivation.
 - Architecture.
 
-### Issues previstas
+### Issues Previstas ou Critérios de Derivação
 
-- Atualizar README com estado real da versão inicial.
-- Registrar limitações e fora de escopo da versão inicial.
-- Validar aderência final à visão.
-- Validar aderência final à arquitetura.
-- Registrar evidência mínima de execução e validação.
-- Preparar continuidade para possíveis melhorias futuras.
-
-### Critérios de derivação de issues
-
-- Separar documentação de fechamento de correções funcionais.
-- Não adicionar novos recursos durante fechamento.
-- Não criar issue formal diretamente a partir da milestone.
-- Criar issue separada para cada lacuna futura relevante.
-- Marcar recursos opcionais como futuras possibilidades, não pendências obrigatórias.
+- Critério: separar correções funcionais de documentação de fechamento.
+- Possível tipo de issue: fechamento de versão inicial.
+- Observação: recursos futuros devem ser tratados como nova rodada de planejamento, não como pendências automáticas.
 
 ### Definition of Done
 
-- O README descreve corretamente o estado do projeto.
-- A versão inicial é executável localmente.
-- A jogabilidade mínima está disponível.
-- Testes e validações essenciais foram executados ou registrados de forma reduzida.
-- A aderência à visão foi revisada.
-- A aderência à arquitetura foi revisada.
-- O n8n permanece fora do runtime.
+- O jogo executa localmente.
+- O modo PvP local está disponível.
+- O modo PvC local está disponível.
+- A IA aleatória escolhe movimentos legais.
+- O humano joga de brancas no PvC inicial.
+- Movimentos inválidos são rejeitados.
+- Capturas e turnos funcionam de forma suficiente para a versão inicial.
+- Testes e validações essenciais foram registrados.
+- A documentação descreve corretamente o estado entregue.
 - Limitações conhecidas estão registradas.
-- Recursos opcionais não foram tratados como obrigatórios.
+- Workflows externos permanecem fora do runtime.
 
-### Evidência mínima
+### Evidência Mínima
 
 - Registro reduzido de execução local.
-- Resultado resumido dos testes e validações.
-- Revisão textual de aderência à visão.
-- Revisão textual de aderência à arquitetura.
+- Resultado resumido de testes e validações.
+- Revisão de aderência à visão.
+- Revisão de aderência à arquitetura.
 - Registro de limitações conhecidas sem logs brutos ou payloads sensíveis.
 
-### Riscos e lacunas
+### Riscos e Lacunas
 
 - Risco de transformar fechamento em nova implementação.
-- Risco de incluir recursos opcionais no escopo obrigatório.
+- Risco de incluir funcionalidades opcionais no escopo obrigatório.
 - Risco de documentação divergir do comportamento real.
-- Risco de confundir evidência de workflow com fonte de verdade.
-- Risco de fechar versão sem explicitar limitações.
+- Risco de fechar versão sem explicitar limitações da IA aleatória.
+- Risco de adotar Implementation Map sem necessidade real.
 
-### Observações de continuidade
+### Critérios de Derivabilidade
 
-Após esta milestone, o projeto pode evoluir para melhorias opcionais, como refinamento visual, histórico de movimentos, desfazer jogada, salvamento local ou IA simples.
+A milestone estará pronta para derivação quando as capacidades centrais já estiverem implementadas e o trabalho restante for principalmente validação, documentação e fechamento proporcional.
 
-Essas melhorias devem ser planejadas em nova rodada de milestones ou issues, preservando a separação entre visão, arquitetura, State operacional, issues e Control.
+### Notas de Continuidade
+
+Após esta milestone, melhorias como IA material simples, escolha de cor, histórico visível, desfazer jogada, salvar/carregar ou refinamento visual devem ser planejadas como nova evolução, não como pendência automática da versão inicial.
 
 ---
 
-## Agrupamentos rejeitados
+## Agrupamentos Rejeitados
 
-### Milestone final de preparação para n8n
-
-Rejeitada.
-
-O projeto já deve ser conduzido pelo pipeline do `n8n-local-stack` desde as primeiras milestones de implementação. Portanto, a relação com n8n é transversal ao processo e não uma capacidade final do jogo.
-
-### Milestone de integração runtime com n8n
+### Milestone de integração runtime com workflows externos
 
 Rejeitada.
 
-O `n8n-local-stack` não faz parte do runtime do jogo. O jogo deve ser executável localmente sem depender do n8n.
+Workflows externos podem apoiar o processo, mas não pertencem ao runtime do jogo.
 
-### Milestone de gameplay automatizado pelo n8n
-
-Rejeitada.
-
-Automação de gameplay não faz parte da visão inicial. O n8n pode apoiar implementação, validação e revisão, mas não deve controlar partidas.
-
-### Milestone de engine própria de xadrez
+### Milestone de engine competitiva
 
 Rejeitada para a versão inicial.
 
-A arquitetura define uso de `python-chess` como motor inicial de regras, encapsulado no domínio.
+A IA inicial é aleatória e limitada.
+
+### Milestone de salvar/carregar partida
+
+Rejeitada para a versão inicial.
+
+Persistência foi definida como fora do escopo inicial.
+
+### Milestone de desfazer jogada
+
+Rejeitada para a versão inicial.
+
+Desfazer jogada pode ser reavaliado futuramente, especialmente por causa da complexidade adicional no modo PvC.
 
 ### Milestone de aplicação web
 
 Rejeitada.
 
-A visão e a arquitetura definem aplicação local, não web.
+O projeto é local e não web.
+
+### Milestone de Implementation Map
+
+Rejeitada neste estágio.
+
+A estratégia vigente é `milestones-only`. A criação de mapa de implementação deve ser reavaliada apenas se o custo de contexto crescer.
 
 ---
 
-## Observações finais
+## Observações Finais
 
-Este documento deve ser usado como base para derivação futura de drafts de issues.
+Este documento orienta a futura geração de drafts de issues e handoffs de implementação, mas não executa nenhuma ação.
 
-A derivação deve respeitar:
+A derivação futura deve preservar:
 
 - escopo núcleo de cada milestone;
 - fora de escopo declarado;
-- dependências;
-- critérios de derivação;
-- Definition of Done;
-- evidência mínima;
-- fronteiras arquiteturais;
-- separação entre planejamento, State operacional e Control.
+- dependências entre capacidades;
+- fronteiras de arquitetura;
+- estratégia `milestones-only`;
+- separação entre planejamento e State operacional;
+- independência do runtime em relação a workflows externos;
+- ausência de automação de gameplay por ferramentas externas.
 
 Nenhuma informação deste documento deve ser interpretada como autorização automática de execução.

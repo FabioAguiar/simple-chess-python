@@ -1,239 +1,306 @@
-# Vision Spec — Simple Chess Python
+# Vision
 
-## Status do Documento
+## Finalidade
 
-| Campo | Valor |
-|---|---|
-| Projeto | Simple Chess Python |
-| Natureza | Jogo simples de xadrez em Python |
-| Status | Visão inicial |
-| Metodologia | SIC — Structured Intent Control |
-| Documento | `docs/vision.md` |
+Este documento registra a direção macro do projeto `simple-chess-python`.
+
+Ele descreve o que o projeto pretende ser, por que existe, quais capacidades fazem parte da visão inicial, quais limites devem ser preservados e quais decisões ainda precisam ser tomadas antes das próximas etapas.
+
+Este documento não é arquitetura detalhada, roadmap, backlog, lista de milestones, issue, plano de execução ou especificação de implementação.
 
 ---
 
-## 1. Identidade do projeto
+## Visão Geral do Projeto
 
-Simple Chess Python é um projeto greenfield para implementação de um jogo simples de xadrez em Python.
+`simple-chess-python` é um projeto de jogo de xadrez simples em Python, executado localmente, com foco em clareza, aprendizado, evolução incremental e apoio a fluxos futuros de desenvolvimento assistido por IA.
 
-O projeto será usado tanto como aplicação de aprendizado quanto como projeto controlado para testar um pipeline de workflows do `n8n-local-stack`, em conjunto com a documentação SIC.
+A visão renovada do projeto é construir um jogo de xadrez local que permita duas formas principais de jogo:
 
-A intenção inicial é manter o projeto pequeno, claro, versionável e adequado para execução incremental assistida por IA. Após a definição dos documentos fundacionais (`vision.md`, `architecture.md` e `milestones.md`), o projeto deve poder ser conduzido pelo pipeline do `n8n-local-stack` desde a primeira milestone de implementação.
+- **PvP local**: dois jogadores humanos jogando no mesmo ambiente;
+- **PvC local**: um jogador humano jogando contra uma IA simples.
 
----
+O projeto deve continuar pequeno e compreensível, mas agora passa a aceitar uma complexidade mínima adicional para torná-lo mais interessante como produto, como estudo de lógica de jogo e como alvo de implementação incremental.
 
-## 2. Propósito
-
-O projeto existe para entregar uma implementação simples e funcional de xadrez em Python, preservando clareza técnica e documentação suficiente para orientar futuras execuções pelo SIC.
-
-Além do jogo em si, o projeto deve servir como caso prático para observar como a documentação SIC ajuda a organizar decisões, reduzir ambiguidade e conduzir a evolução de um sistema desde o início.
+A IA adversária não deve ser competitiva ou avançada. Ela deve ser simples, suficiente para criar uma experiência básica de jogo contra o computador, sem transformar o projeto em uma engine de xadrez.
 
 ---
 
-## 3. Problema que resolve
+## Problema ou Oportunidade
 
-O projeto resolve duas necessidades concretas:
+O projeto nasce da oportunidade de criar uma aplicação de xadrez pequena, mas não trivial, que sirva ao mesmo tempo para:
 
-1. criar um jogo simples de xadrez que possa ser entendido, executado e evoluído de forma incremental;
-2. fornecer um repositório pequeno e controlável para testar workflows do `n8n-local-stack` desde as primeiras etapas de implementação, sem a complexidade de um sistema grande.
+- praticar desenvolvimento em Python;
+- exercitar separação entre lógica de jogo, interação do usuário e controle da partida;
+- experimentar implementação incremental assistida por IA;
+- fornecer um projeto controlado para validação de fluxos externos de automação e documentação;
+- explorar uma IA simples sem entrar em complexidade de motor competitivo.
 
-Como as regras do xadrez são conhecidas e estáveis, o projeto é adequado para testar processo, documentação, validação e continuidade, sem exigir longa descoberta de domínio.
-
----
-
-## 4. Direção do produto
-
-A direção atual é construir um jogo local de xadrez em Python, com escopo controlado e implementação simples.
-
-A prioridade é:
-
-- clareza antes de sofisticação;
-- regras essenciais antes de recursos avançados;
-- documentação útil antes de formalismo excessivo;
-- arquitetura proporcional ao tamanho real do projeto;
-- suporte ao pipeline SIC/n8n sem transformar o jogo em um projeto de automação.
-
-A interface gráfica e a estrutura arquitetural inicial foram consolidadas no `docs/architecture.md`. Mudanças relevantes nessas decisões devem ser registradas antes de afetarem a implementação.
+A oportunidade principal é construir algo pequeno o suficiente para ser implementável por etapas, mas rico o suficiente para exigir decisões reais de produto, arquitetura e validação.
 
 ---
 
-## 5. Modelo conceitual inicial
+## Público-Alvo ou Usuários
 
-Conceitos principais do projeto:
+O público principal do projeto é o próprio mantenedor/desenvolvedor, que usará o projeto para aprendizado, experimentação e validação de processo.
 
-- **Jogo**: coordena o fluxo geral da partida.
-- **Tabuleiro**: representa as casas e a posição das peças.
-- **Peça**: representa cada peça de xadrez e suas regras de movimentação.
-- **Jogador**: representa o lado branco ou preto.
-- **Turno**: controla qual jogador pode mover.
-- **Movimento**: representa uma tentativa de deslocamento de peça.
-- **Validação de movimento**: verifica se um movimento é permitido.
-- **Estado da partida**: registra posição atual, turno, capturas e condições relevantes de continuidade ou encerramento.
+Usuários secundários possíveis:
 
-Este modelo conceitual não define ainda a arquitetura final.
+- pessoas interessadas em executar um jogo simples de xadrez local;
+- avaliadores de portfólio;
+- ferramentas ou fluxos externos que precisem ler a documentação do projeto para apoiar implementação, validação ou revisão;
+- futuras sessões de IA que precisem entender o projeto com baixo custo de contexto.
+
+O projeto não tem, nesta visão inicial, foco em usuários finais comerciais, ambiente de produção ou distribuição ampla.
 
 ---
 
-## 6. Drivers arquiteturais iniciais
+## Objetivo Principal
 
-A futura arquitetura deve considerar os seguintes fatores:
+Construir um jogo simples de xadrez em Python, executável localmente, que permita jogar uma partida básica em modo PvP local e em modo PvC contra uma IA simples.
 
-- projeto local e versionável;
-- implementação em Python;
-- escopo pequeno e adequado para aprendizado;
-- regras de xadrez estáveis e conhecidas;
-- necessidade de separar lógica de jogo e interface;
-- necessidade de testes mínimos para regras essenciais;
-- uso do projeto como caso de teste para workflows do `n8n-local-stack` desde a primeira milestone de implementação;
-- documentação SIC como referência de direção e continuidade;
-- preferência por simplicidade e baixo custo de contexto para IA;
-- rejeição de overengineering nesta fase inicial.
-
-Esses drivers não fecham a arquitetura. Eles apenas orientam a próxima etapa de descoberta e decisão arquitetural.
+O projeto deve preservar clareza estrutural, escopo controlado e documentação suficiente para orientar arquitetura, milestones e futuras implementações assistidas por IA.
 
 ---
 
-## 7. Escopo núcleo
+## Objetivos Secundários
 
-A visão central depende dos seguintes itens:
+- Manter o projeto adequado para aprendizado e portfólio.
+- Permitir evolução incremental sem exigir arquitetura pesada.
+- Registrar decisões importantes de forma clara e versionável.
+- Evitar que a IA adversária transforme o projeto em uma engine complexa.
+- Permitir testes ou validações mínimas das regras centrais e do fluxo de partida.
+- Preservar independência do jogo em relação a automações externas.
+- Facilitar futuras derivações de issues sem inventar escopo.
 
-- jogo implementado em Python;
+---
+
+## Núcleo do Projeto
+
+O núcleo da visão inicial inclui:
+
+- jogo de xadrez implementado em Python;
+- execução local;
+- modo PvP local;
+- modo PvC local com IA simples;
 - representação funcional do tabuleiro;
 - representação das peças principais do xadrez;
-- controle de turnos entre brancas e pretas;
-- validação de movimentos essenciais;
-- impedimento de movimentos claramente inválidos;
+- controle de turnos;
+- validação de movimentos legais;
+- rejeição de movimentos inválidos;
 - captura de peças;
-- identificação mínima de xeque e fim de partida, conforme decisão arquitetural futura;
-- interface simples para interação local;
-- documentação fundacional composta, no mínimo, por:
-  - `README.md`;
-  - `docs/vision.md`;
-  - `docs/architecture.md`;
-  - documento de milestones ou planejamento equivalente, se adotado no fluxo SIC;
-- estrutura suficiente para que o pipeline do `n8n-local-stack` leia os documentos fundacionais, identifique a milestone vigente, apoie a geração de issues, conduza implementações e registre validações externas.
+- identificação básica de estados relevantes da partida, como xeque, xeque-mate ou empate, conforme viabilidade técnica futura;
+- interface local simples para interação com o jogo;
+- separação conceitual entre lógica do jogo, controle da partida, interface e comportamento da IA;
+- documentação fundacional suficiente para orientar próximas etapas.
 
 ---
 
-## 8. Escopo não-bloqueante
+## Funcionalidades ou Capacidades Desejadas
 
-Os itens abaixo podem melhorar o projeto, mas não devem bloquear a conclusão da visão central:
+As capacidades desejadas em nível de visão são:
 
-- interface gráfica mais refinada;
-- destaque visual de movimentos possíveis;
-- histórico de movimentos;
-- desfazer jogada;
-- salvar e carregar partidas;
-- testes mais abrangentes de regras especiais;
-- empacotamento da aplicação;
-- publicação de release;
-- documentação visual com imagens ou GIFs;
-- suporte futuro a IA simples para jogar contra o computador.
+- iniciar uma nova partida;
+- escolher modo de jogo PvP ou PvC;
+- permitir que dois jogadores humanos joguem localmente;
+- permitir que um jogador humano enfrente uma IA simples;
+- permitir escolha ou definição inicial de lado, se isso não aumentar excessivamente o escopo;
+- movimentar peças por uma interação local simples;
+- exibir o tabuleiro e as peças de forma compreensível;
+- indicar turno atual;
+- impedir jogadas inválidas;
+- aplicar capturas corretamente;
+- informar estados básicos da partida;
+- exibir mensagem de fim de jogo;
+- manter histórico simples de movimentos, se isso se mostrar proporcional;
+- permitir desfazer jogada, se isso não aumentar demais a complexidade inicial;
+- registrar limitações conhecidas da IA simples.
+
+Estas capacidades não devem ser tratadas automaticamente como backlog ou milestones. A priorização deve ser feita em documentos posteriores.
 
 ---
 
-## 9. Fora do escopo
+## Fora de Escopo
 
-Não fazem parte desta visão inicial:
+Não fazem parte da visão inicial:
 
 - motor de xadrez competitivo;
-- análise avançada de posições;
-- integração com Stockfish ou engines externas;
+- integração com Stockfish ou engines externas avançadas;
+- IA forte ou com busca profunda complexa;
 - multiplayer online;
 - autenticação de usuários;
 - ranking, matchmaking ou sistema de contas;
 - servidor web obrigatório;
+- aplicação web;
+- banco de dados obrigatório;
 - persistência complexa;
 - suporte formal a torneios;
 - relógio de xadrez obrigatório;
-- automação do gameplay pelo n8n;
-- transformar o projeto em framework genérico de jogos.
+- análise avançada de posições;
+- estudo aprofundado de aberturas;
+- geração automática de partidas pelo sistema;
+- automação do gameplay por ferramentas externas;
+- transformar o projeto em framework genérico de jogos;
+- criar uma arquitetura pesada incompatível com o tamanho do projeto.
 
 ---
 
-## 10. Restrições e princípios
+## Restrições Conhecidas
 
-A evolução do projeto deve respeitar as seguintes restrições:
-
-- manter separação entre visão, arquitetura, milestones, issues, State, Intent e Control;
-- não transformar este documento em plano de implementação detalhado;
-- não alterar a stack gráfica consolidada no `docs/architecture.md` sem decisão explícita;
-- não introduzir arquitetura complexa sem necessidade real;
-- preservar legibilidade para humanos e para IA;
-- priorizar decisões explícitas e registradas;
-- evitar requisitos implícitos não declarados pelo usuário;
-- manter o projeto pequeno o suficiente para testar o pipeline de workflows;
-- tratar o `n8n-local-stack` como orquestrador externo do processo de implementação e validação, não como parte interna do jogo;
-- manter artefatos locais, caches e saídas de runtime fora do versionamento.
+- O projeto deve ser desenvolvido em Python.
+- O jogo deve ser local e não web.
+- O escopo deve permanecer pequeno e controlado.
+- A IA adversária deve ser simples.
+- O projeto deve ser compreensível para humanos e para IA.
+- A documentação deve apoiar continuidade e implementação incremental.
+- A automação externa pode apoiar o processo de desenvolvimento, mas não deve ser dependência funcional do jogo.
+- Artefatos locais, caches, saídas de runtime e arquivos sensíveis não devem ser tratados como parte da visão do produto.
+- Decisões arquiteturais detalhadas devem ser tomadas em etapa própria.
+- A escolha final de bibliotecas, estrutura interna e estratégia de IA deve ser confirmada na arquitetura.
 
 ---
 
-## 11. Relação com State, Intent e Control
+## Preferências do Usuário
 
-### State
-
-Este documento pode informar States futuros, mas não é memória operacional detalhada.
-
-Ele não deve registrar histórico de execução, patches aplicados ou decisões locais de issues específicas.
-
-### Intent
-
-Este documento orienta intenções futuras, mas não substitui o tipo de tarefa de cada execução.
-
-Cada etapa futura ainda deve declarar sua intenção de forma explícita.
-
-### Control
-
-Este documento limita e orienta execuções futuras, mas não define como executar a implementação.
-
-A execução deve ocorrer por prompts, templates, issues, patches ou workflows apropriados.
+- O usuário deseja manter o projeto como um jogo simples de xadrez em Python.
+- O usuário deseja aumentar minimamente a complexidade do jogo antes da implementação.
+- O usuário escolheu seguir com o caminho **PvP local + PvC com IA simples**.
+- O usuário deseja que o projeto continue adequado para implementação por IA, especialmente por fluxo assistido com Codex CLI.
+- O usuário deseja que o projeto sirva como alvo de validação prática de documentação e processo.
+- O usuário prefere decisões explícitas e bem documentadas antes da implementação.
+- O usuário não quer transformar o projeto em algo grande ou excessivamente sofisticado.
 
 ---
 
-## 12. Relação com Architecture
+## Critérios de Sucesso
 
-O `docs/architecture.md` consolida as decisões técnicas iniciais derivadas desta visão.
-
-As decisões já consolidadas incluem:
-
-- aplicação local, não web;
-- interface gráfica com Pygame;
-- arquitetura modular simples em camadas leves;
-- separação entre interface, aplicação e domínio;
-- uso de `python-chess` encapsulado na camada de domínio;
-- uso de `pytest` para testes;
-- uso de Ruff para lint e formatação;
-- manutenção do `n8n-local-stack` fora do runtime do jogo.
-
-Este documento de visão continua definindo o propósito e os limites macro do projeto. O documento de arquitetura define as decisões técnicas iniciais para orientar a implementação.
-
----
-
-## 13. Definition of Done macro
-
-A visão central poderá ser considerada concluída quando:
+A visão será atendida quando:
 
 - o jogo puder ser executado localmente;
-- dois jogadores puderem jogar uma partida simples no mesmo ambiente;
-- o tabuleiro e as peças forem representados de forma compreensível;
-- turnos forem controlados corretamente;
-- movimentos inválidos básicos forem rejeitados;
+- o usuário puder iniciar uma partida de xadrez;
+- o usuário puder escolher entre PvP local e PvC local;
+- dois jogadores humanos puderem jogar localmente;
+- um jogador humano puder jogar contra uma IA simples;
+- o tabuleiro e as peças forem compreensíveis;
+- os turnos forem controlados corretamente;
+- movimentos inválidos forem rejeitados;
 - capturas forem aplicadas corretamente;
-- regras essenciais de xeque ou encerramento forem tratadas conforme escopo definido na arquitetura;
-- houver testes ou validações mínimas para regras centrais;
-- a documentação fundacional estiver presente e coerente;
-- o projeto puder ser usado como alvo de implementação, validação e revisão pelo pipeline de workflows do `n8n-local-stack`.
+- estados básicos de encerramento forem tratados de forma suficiente para uma versão simples;
+- a IA simples conseguir escolher movimentos legais;
+- a complexidade da IA permanecer compatível com o escopo do projeto;
+- a documentação fundacional estiver coerente com o comportamento esperado do projeto;
+- o projeto permanecer independente de automações externas para funcionar.
 
 ---
 
-## 14. Pontos em aberto
+## Riscos e Incertezas
 
-As seguintes decisões ainda podem ser refinadas em etapas futuras:
+- A inclusão de PvC pode aumentar o escopo além do desejado se a IA não for claramente limitada.
+- A definição de “IA simples” precisa ser refinada antes da implementação.
+- Ainda é necessário decidir se a IA será aleatória, baseada em avaliação material simples ou em outra estratégia leve.
+- A interface local ainda precisa ser detalhada em etapa arquitetural.
+- Histórico de movimentos, desfazer jogada e salvamento podem ser úteis, mas podem aumentar o escopo se forem tratados como obrigatórios cedo demais.
+- O tratamento completo de regras especiais do xadrez pode gerar complexidade se não for apoiado por biblioteca apropriada.
+- Há risco de misturar lógica de IA, lógica de regras e interface se a arquitetura não definir fronteiras claras.
+- Há risco de overengineering se o projeto tentar antecipar recursos avançados.
 
-- nível exato de refinamento visual da interface;
-- nível de suporte inicial a recursos opcionais, como histórico, desfazer jogada ou salvamento;
-- formato final das issues derivadas das milestones;
-- critérios operacionais específicos usados pelo pipeline do `n8n-local-stack` para conduzir cada implementação;
-- licença do projeto.
+---
 
-Esses pontos não bloqueiam a criação do `docs/milestones.md`, mas devem ser tratados por decisões explícitas quando passarem a afetar implementação, validação ou distribuição.
+## Decisões Pendentes
+
+As seguintes decisões devem ser tomadas em etapas posteriores:
+
+- biblioteca ou abordagem para interface local;
+- forma final de interação do usuário, como mouse, teclado ou combinação;
+- estratégia da IA simples;
+- nível inicial de dificuldade da IA;
+- se haverá escolha de cor no modo PvC;
+- se histórico de movimentos entra no núcleo inicial ou fica como melhoria posterior;
+- se desfazer jogada entra no núcleo inicial ou fica como melhoria posterior;
+- se salvar/carregar partida entra no núcleo inicial ou fica como melhoria posterior;
+- como representar visualmente estados como xeque, xeque-mate e empate;
+- quais validações mínimas serão exigidas antes de considerar a versão inicial concluída;
+- como a documentação da implementação será organizada ao longo do projeto.
+
+---
+
+## Âncoras para Arquitetura
+
+A futura arquitetura deve considerar:
+
+- separação entre regras do xadrez, fluxo da partida, interface e IA;
+- manutenção da aplicação como local e não web;
+- suporte a dois modos de jogo: PvP e PvC;
+- limitação explícita da IA para evitar complexidade de engine competitiva;
+- possibilidade de trocar ou evoluir a estratégia da IA sem reescrever o jogo inteiro;
+- necessidade de validar movimentos legais de forma confiável;
+- necessidade de manter baixo acoplamento entre interface e regras;
+- necessidade de testes mínimos para domínio, fluxo de partida e IA simples;
+- risco de overengineering;
+- facilidade de compreensão por IA e por humanos;
+- independência do runtime em relação a workflows externos;
+- clareza sobre quais bibliotecas são dependências do jogo e quais ferramentas são apenas apoio de desenvolvimento.
+
+A arquitetura não deve ser definida neste documento.
+
+---
+
+## Âncoras para Milestones
+
+As futuras milestones devem considerar, em ordem conceitual, capacidades como:
+
+- fundação documental do projeto;
+- definição da estrutura técnica inicial;
+- implementação das regras e estado base do jogo;
+- implementação do fluxo de partida;
+- implementação do modo PvP local;
+- implementação da IA simples;
+- integração do modo PvC;
+- implementação da interface local;
+- validação mínima de regras, turnos, movimentos e IA;
+- fechamento de uma versão inicial executável.
+
+As milestones devem separar capacidades reais, evitando misturar interface, IA, regras, testes e fechamento documental em uma única etapa grande demais.
+
+A geração de milestones deve preservar os limites desta visão e não transformar funcionalidades opcionais em obrigações sem decisão explícita.
+
+---
+
+## Âncoras para Documentação da Implementação
+
+Como o projeto será implementado com apoio recorrente de IA, a documentação da implementação pode se tornar útil para preservar continuidade entre etapas.
+
+Sinais que devem ser avaliados futuramente:
+
+- o projeto terá múltiplas áreas com responsabilidades diferentes;
+- haverá lógica de jogo, interface e IA simples;
+- decisões futuras podem precisar ser reaproveitadas por outras sessões de IA;
+- o custo de contexto pode crescer conforme o projeto evoluir;
+- documentação excessiva pode ser desproporcional para um jogo pequeno.
+
+Estratégias possíveis a avaliar futuramente:
+
+- `milestones-only`;
+- `implementation-map-single`;
+- `implementation-map-hierarchical`;
+- `implementation-index-assisted`;
+- `not-applicable`.
+
+A estratégia final não deve ser decidida neste documento.
+
+---
+
+## Notas para Próximos Passos
+
+O próximo passo documental provável é gerar ou reformular `docs/architecture.md` com base nesta visão renovada.
+
+A arquitetura deve avaliar especialmente:
+
+- fronteiras entre regras, aplicação, interface e IA;
+- estratégia inicial da IA simples;
+- biblioteca de interface local;
+- dependências adequadas para regras de xadrez;
+- estrutura de diretórios;
+- estratégia mínima de testes;
+- como preservar simplicidade sem bloquear evolução.
+
+Depois da arquitetura, o projeto poderá ter `docs/milestones.md` reformulado para refletir a nova visão com PvP local e PvC com IA simples.
