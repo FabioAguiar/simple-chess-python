@@ -94,6 +94,28 @@ class MatchState:
         """
         return [move.uci() for move in self._board.legal_moves]
 
+    def is_legal_move(self, uci: str) -> bool:
+        """Return whether a move is legal in the current position.
+
+        This is a check-only operation: the board state is **not** modified
+        regardless of the result.  Use :meth:`push_uci` to apply a move
+        after confirming it is legal.
+
+        Args:
+            uci: A candidate move in UCI notation, e.g. ``"e2e4"`` or
+                 ``"e7e8q"`` (promotion).
+
+        Returns:
+            ``True`` if the move is syntactically valid UCI and legal in the
+            current position.  ``False`` for any invalid or illegal move,
+            including malformed UCI strings.
+        """
+        try:
+            move = chess.Move.from_uci(uci)
+        except (chess.InvalidMoveError, ValueError):
+            return False
+        return move in self._board.legal_moves
+
     # ------------------------------------------------------------------
     # Mutation
     # ------------------------------------------------------------------
