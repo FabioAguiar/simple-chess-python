@@ -9,16 +9,18 @@
     "operational_state_document": "docs/project-status/milestone-state.json"
   },
   "current_milestone": {
-    "id": "M2",
-    "title": "Estrutura base Python e configuração do projeto",
+    "id": "M3",
+    "title": "Dom?nio e regras do xadrez",
     "status": "active"
   },
-  "last_completed_milestone": "M1",
+  "last_completed_milestone": "M2",
   "completed_milestones": [
-    "M1"
+    "M1",
+    "M2"
   ],
   "locked_completed_milestones": [
-    "M1"
+    "M1",
+    "M2"
   ],
   "reopen_records": [],
   "regression_policy": {
@@ -42,7 +44,9 @@
     "This file records operational milestone state only.",
     "M1 is marked as completed because the foundation documents were consolidated for the renewed project vision and architecture.",
     "M1 is locked to prevent implicit regression without an explicit reopen record.",
-    "M2 is the current active milestone and should be validated against docs/milestones.md before workflow continuation.",
+    "M2 is marked as completed because the base Python structure and modular organization were prepared and validated for continuation.",
+    "M2 is locked to prevent implicit regression without an explicit reopen record.",
+    "M3 is the current active milestone and should be validated against docs/milestones.md before workflow continuation.",
     "docs/milestones.md remains the planning document and must not be treated as the operational cursor.",
     "docs/architecture.md may define the implementation documentation strategy; this file only records milestone state.",
     "Issues, handoffs, workflows, and scripts may use this state as input for validation, but must not infer authorization to implement from this file alone.",
