@@ -1,1 +1,0 @@
-"""Simple Chess package root."""
