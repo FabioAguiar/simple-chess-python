@@ -1,0 +1,2 @@
+"""Simple Chess package."""
+
