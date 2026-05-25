@@ -1,7 +1,14 @@
-"""Session layer for chess game coordination (M4-01).
+"""Session layer for chess game coordination (M4-01, M4-04).
 
 Defines the game session structure: mode (PvP or PvC), player types
 (human or computer per side), and reference to the domain MatchState.
+
+M4-04 extends the session with:
+- AI turn detection (is_computer_turn).
+- AI hook that accepts an external callable without own AI logic
+  (request_ai_move).
+- Game state snapshot for the future interface layer M5
+  (game_state_snapshot).
 
 The application layer does not implement chess rules — those belong to
 the domain (``simple_chess.domain``).  It does not depend on Pygame —
@@ -13,12 +20,14 @@ Example usage::
     from simple_chess.app.session import GameMode, GameSession, PlayerType
 
     match = MatchState()
-    session = GameSession(mode=GameMode.PVP, match=match)
-    session.current_player_type()   # PlayerType.HUMAN
-    session.mode                    # GameMode.PVP
+    session = GameSession(mode=GameMode.PVC, match=match)
+    session.current_player_type()   # PlayerType.HUMAN (white's turn)
+    session.is_computer_turn()      # False (human starts)
+    session.game_state_snapshot()   # {"turn": "white", "mode": "pvc", ...}
 """
 from __future__ import annotations
 
+from collections.abc import Callable
 from enum import Enum
 
 from simple_chess.domain.match import MatchState
@@ -128,3 +137,65 @@ class GameSession:
             if self._match.current_turn() == "white"
             else self._black_player
         )
+
+    def is_computer_turn(self) -> bool:
+        """Return ``True`` if the current player is a computer (AI) player.
+
+        Uses :meth:`current_player_type` and the session's player
+        configuration.  Intended as the primary check in the AI hook
+        before invoking an external AI callable.
+
+        Returns:
+            ``True`` when the side to move is :attr:`PlayerType.COMPUTER`,
+            ``False`` otherwise (always ``False`` in PvP mode).
+        """
+        return self.current_player_type() == PlayerType.COMPUTER
+
+    def request_ai_move(self, ai_fn: Callable[[list[str]], str]) -> str:
+        """Request a move from an external AI function.
+
+        Collects the current legal moves from the domain and passes them to
+        the provided callable.  **No AI logic is implemented here** — the
+        session only acts as the integration point.  The actual strategy
+        belongs to the AI layer (M7).
+
+        Args:
+            ai_fn: A callable that receives a list of legal UCI move strings
+                and returns a chosen UCI move string.  Any function with this
+                signature is accepted, which keeps the session decoupled from
+                any specific AI implementation.
+
+        Returns:
+            The UCI move string returned by *ai_fn*.
+        """
+        legal_moves = self._match.legal_move_ucis()
+        return ai_fn(legal_moves)
+
+    def game_state_snapshot(self) -> dict[str, object]:
+        """Return a snapshot of the current game state as plain Python types.
+
+        Provides the information needed by the future interface layer (M5)
+        to render the game without accessing the domain directly.  All
+        values use standard Python types — no types from ``python-chess``
+        are included, in compliance with ADR-004.
+
+        Returns:
+            A ``dict`` with the following keys:
+
+            - ``"turn"`` (``str``): ``"white"`` or ``"black"``.
+            - ``"mode"`` (``str``): ``"pvp"`` or ``"pvc"``.
+            - ``"is_game_over"`` (``bool``): whether the game has ended.
+            - ``"is_check"`` (``bool``): whether the side to move is in check.
+            - ``"outcome"`` (``str | None``): termination reason string, or
+              ``None`` if the game is still in progress.
+            - ``"legal_moves"`` (``list[str]``): UCI strings of legal moves
+              for the current position; empty when the game is over.
+        """
+        return {
+            "turn": self._match.current_turn(),
+            "mode": self._mode.value,
+            "is_game_over": self._match.is_game_over(),
+            "is_check": self._match.is_check(),
+            "outcome": self._match.outcome(),
+            "legal_moves": self._match.legal_move_ucis(),
+        }
