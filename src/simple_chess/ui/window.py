@@ -129,6 +129,7 @@ def run() -> None:
     font = make_piece_font()
     hud_font = pygame.font.Font(None, 24)
     invalid_move_timer = 0
+    state = local_game.game_state_snapshot()
 
     running = True
     while running:
@@ -142,12 +143,13 @@ def run() -> None:
                     mouse_x, mouse_y = event.pos
                     uci = input_handler.handle_click(mouse_x, mouse_y)
                     if uci is not None:
-                        move_applied = local_game.submit_move_intent(uci)
+                        move_applied, state = local_game.submit_move_intent_with_snapshot(
+                            uci
+                        )
                         invalid_move_timer = (
                             0 if move_applied else INVALID_MOVE_MESSAGE_FRAMES
                         )
 
-        state = local_game.game_state_snapshot()
         draw_board(screen, input_handler.selected_square)
         draw_pieces(screen, state["board"], font)
         _draw_hud(screen, hud_font, state, invalid_move_timer)

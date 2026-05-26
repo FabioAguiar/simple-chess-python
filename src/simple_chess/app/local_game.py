@@ -42,6 +42,19 @@ class LocalGame:
         self._turn_controller.receive_move_intent(uci)
         return self._move_processor.process_pending_intent()
 
+    def submit_move_intent_with_snapshot(
+        self,
+        uci: str,
+    ) -> tuple[bool, dict[str, object]]:
+        """Apply a UI movement intent and return the refreshed game state.
+
+        The UI can use this to redraw from the Application-layer snapshot
+        immediately after each accepted move, including captures and all
+        piece position updates, without accessing the domain directly.
+        """
+        move_applied = self.submit_move_intent(uci)
+        return move_applied, self.game_state_snapshot()
+
     def game_state_snapshot(self) -> dict[str, object]:
         """Return the current game state as plain Python values for the UI."""
         return self._session.game_state_snapshot()
