@@ -4,27 +4,37 @@
   "project_id": "simple-chess-python",
   "source_of_truth": {
     "milestones_document": "docs/milestones.md",
-    "formal_issue_source": "github",
+    "formal_issue_source": "support_workspace",
     "architecture_document": "docs/architecture.md",
     "operational_state_document": "docs/project-status/milestone-state.json"
   },
+  "formal_issue_location": {
+    "workspace_alias": "project_support_root",
+    "project_support_subpath": "simple-chess-python",
+    "formal_issues_index_pattern": "issues/{milestone_id}/formal-issues-index.json",
+    "formal_issue_json_pattern": "issues/{milestone_id}/{issue_id}/formal-issue.json",
+    "formal_issue_markdown_pattern": "issues/{milestone_id}/{issue_id}/issue.md",
+    "github_role": "publication_target_or_human_reference"
+  }, 
   "current_milestone": {
-    "id": "M5",
-    "title": "Interface local inicial com Pygame",
+    "id": "M6",
+    "title": "Modo PvP local jogável",
     "status": "active"
   },
-  "last_completed_milestone": "M4",
+  "last_completed_milestone": "M5",
   "completed_milestones": [
     "M1",
     "M2",
     "M3",
-    "M4"
+    "M4",
+    "M5"
   ],
   "locked_completed_milestones": [
     "M1",
     "M2",
     "M3",
-    "M4"
+    "M4",
+    "M5"
   ],
   "reopen_records": [],
   "regression_policy": {
@@ -54,7 +64,9 @@
     "M3 is locked to prevent implicit regression without an explicit reopen record.",
     "M4 is marked as completed because the application layer, game session, move flow, AI hook, and application tests were prepared and validated for continuation.",
     "M4 is locked to prevent implicit regression without an explicit reopen record.",
-    "M5 is the current active milestone and should be validated against docs/milestones.md before workflow continuation.",
+    "M5 is marked as completed because the initial local Pygame interface, board rendering, piece rendering, mouse interaction foundation, and UI/application integration points were prepared for continuation.",
+    "M5 is locked to prevent implicit regression without an explicit reopen record.",
+    "M6 is the current active milestone and should be validated against docs/milestones.md before workflow continuation.",
     "docs/milestones.md remains the planning document and must not be treated as the operational cursor.",
     "docs/architecture.md may define the implementation documentation strategy; this file only records milestone state.",
     "Issues, handoffs, workflows, and scripts may use this state as input for validation, but must not infer authorization to implement from this file alone.",

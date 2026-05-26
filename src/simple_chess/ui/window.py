@@ -13,6 +13,96 @@ from simple_chess.ui.config import FPS, WINDOW_HEIGHT, WINDOW_TITLE, WINDOW_WIDT
 from simple_chess.ui.input_handler import InputHandler
 from simple_chess.ui.piece_renderer import draw_pieces, make_piece_font
 
+INVALID_MOVE_MESSAGE_FRAMES: int = FPS * 3
+HUD_TEXT_COLOR: tuple[int, int, int] = (255, 255, 255)
+HUD_SHADOW_COLOR: tuple[int, int, int] = (0, 0, 0)
+HUD_PANEL_COLOR: tuple[int, int, int, int] = (0, 0, 0, 145)
+HUD_MARGIN: int = 10
+HUD_PADDING: int = 8
+HUD_LINE_GAP: int = 4
+
+
+def _format_turn(turn: object) -> str:
+    if turn == "white":
+        return "Turn: White"
+    if turn == "black":
+        return "Turn: Black"
+    return f"Turn: {turn}"
+
+
+def _format_outcome(outcome: object) -> str:
+    labels = {
+        "checkmate": "Checkmate",
+        "stalemate": "Draw: stalemate",
+        "insufficient_material": "Draw: insufficient material",
+        "seventyfive_moves": "Draw: seventy-five moves",
+        "fivefold_repetition": "Draw: fivefold repetition",
+        "fifty_moves": "Draw: fifty moves",
+        "threefold_repetition": "Draw: threefold repetition",
+    }
+    if isinstance(outcome, str):
+        return labels.get(outcome, f"Game over: {outcome.replace('_', ' ')}")
+    return "Game over"
+
+
+def _status_message(state: dict[str, object], invalid_move_timer: int) -> str | None:
+    if state.get("is_game_over"):
+        return _format_outcome(state.get("outcome"))
+    if invalid_move_timer > 0:
+        return "Invalid move"
+    if state.get("is_check"):
+        return "Check"
+    return None
+
+
+def _render_text_with_shadow(
+    screen: pygame.Surface,
+    font: pygame.font.Font,
+    text: str,
+    position: tuple[int, int],
+) -> pygame.Rect:
+    shadow_surface = font.render(text, True, HUD_SHADOW_COLOR)
+    text_surface = font.render(text, True, HUD_TEXT_COLOR)
+    shadow_rect = shadow_surface.get_rect(topleft=(position[0] + 1, position[1] + 1))
+    text_rect = text_surface.get_rect(topleft=position)
+    screen.blit(shadow_surface, shadow_rect)
+    screen.blit(text_surface, text_rect)
+    return text_rect
+
+
+def _draw_hud(
+    screen: pygame.Surface,
+    font: pygame.font.Font,
+    state: dict[str, object],
+    invalid_move_timer: int,
+) -> None:
+    lines = [_format_turn(state.get("turn"))]
+    status_message = _status_message(state, invalid_move_timer)
+    if status_message is not None:
+        lines.append(status_message)
+
+    rendered_lines = [font.render(line, True, HUD_TEXT_COLOR) for line in lines]
+    panel_width = max(surface.get_width() for surface in rendered_lines) + HUD_PADDING * 2
+    panel_height = (
+        sum(surface.get_height() for surface in rendered_lines)
+        + HUD_LINE_GAP * (len(rendered_lines) - 1)
+        + HUD_PADDING * 2
+    )
+
+    panel = pygame.Surface((panel_width, panel_height), pygame.SRCALPHA)
+    panel.fill(HUD_PANEL_COLOR)
+    screen.blit(panel, (HUD_MARGIN, HUD_MARGIN))
+
+    y = HUD_MARGIN + HUD_PADDING
+    for line in lines:
+        rect = _render_text_with_shadow(
+            screen,
+            font,
+            line,
+            (HUD_MARGIN + HUD_PADDING, y),
+        )
+        y += rect.height + HUD_LINE_GAP
+
 
 def run() -> None:
     """Initialize Pygame, open the game window, and run the main event loop.
@@ -45,6 +135,8 @@ def run() -> None:
     # --- UI/Application integration (M5-05) ---
     move_processor = MoveProcessor(match=match, controller=turn_controller)
     font = make_piece_font()
+    hud_font = pygame.font.Font(None, 24)
+    invalid_move_timer = 0
 
     running = True
     while running:
@@ -59,12 +151,20 @@ def run() -> None:
                     uci = input_handler.handle_click(mouse_x, mouse_y)
                     if uci is not None:
                         turn_controller.receive_move_intent(uci)
-                        move_processor.process_pending_intent()
+                        move_applied = move_processor.process_pending_intent()
+                        invalid_move_timer = (
+                            0 if move_applied else INVALID_MOVE_MESSAGE_FRAMES
+                        )
 
         state = session.game_state_snapshot()
-        draw_board(screen)
+        draw_board(screen, input_handler.selected_square)
         draw_pieces(screen, state["board"], font)
+        _draw_hud(screen, hud_font, state, invalid_move_timer)
         pygame.display.flip()
+
+        if invalid_move_timer > 0:
+            invalid_move_timer -= 1
+
         clock.tick(FPS)
 
     pygame.quit()
