@@ -4,12 +4,14 @@ import sys
 
 import pygame
 
+from simple_chess.app.move_processor import MoveProcessor
 from simple_chess.app.session import GameMode, GameSession
 from simple_chess.app.turn_controller import TurnController
 from simple_chess.domain.match import MatchState
 from simple_chess.ui.board_renderer import draw_board
 from simple_chess.ui.config import FPS, WINDOW_HEIGHT, WINDOW_TITLE, WINDOW_WIDTH
 from simple_chess.ui.input_handler import InputHandler
+from simple_chess.ui.piece_renderer import draw_pieces, make_piece_font
 
 
 def run() -> None:
@@ -40,6 +42,10 @@ def run() -> None:
     turn_controller = TurnController(session=session)
     input_handler = InputHandler()
 
+    # --- UI/Application integration (M5-05) ---
+    move_processor = MoveProcessor(match=match, controller=turn_controller)
+    font = make_piece_font()
+
     running = True
     while running:
         for event in pygame.event.get():
@@ -53,8 +59,11 @@ def run() -> None:
                     uci = input_handler.handle_click(mouse_x, mouse_y)
                     if uci is not None:
                         turn_controller.receive_move_intent(uci)
+                        move_processor.process_pending_intent()
 
+        state = session.game_state_snapshot()
         draw_board(screen)
+        draw_pieces(screen, state["board"], font)
         pygame.display.flip()
         clock.tick(FPS)
 
