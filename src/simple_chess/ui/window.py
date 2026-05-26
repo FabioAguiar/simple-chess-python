@@ -4,6 +4,7 @@ import sys
 
 import pygame
 
+from simple_chess.ui.board_renderer import draw_board
 from simple_chess.ui.config import FPS, WINDOW_HEIGHT, WINDOW_TITLE, WINDOW_WIDTH
 
 
@@ -26,7 +27,7 @@ def run() -> None:
             if event.type == pygame.QUIT:
                 running = False
 
-        screen.fill((0, 0, 0))
+        draw_board(screen)
         pygame.display.flip()
         clock.tick(FPS)
 

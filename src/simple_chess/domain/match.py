@@ -116,6 +116,28 @@ class MatchState:
             return False
         return move in self._board.legal_moves
 
+    def board_map(self) -> dict[str, str]:
+        """Return the current piece positions as a plain Python mapping.
+
+        Maps each occupied square to its piece symbol using standard
+        algebraic notation.  No ``python-chess`` types are exposed in
+        the return value, in compliance with ADR-004.
+
+        Returns:
+            A ``dict[str, str]`` where each key is a square name
+            (``"a1"`` through ``"h8"``) and each value is the
+            one-character piece symbol for the occupying piece:
+            upper-case for White (``K``, ``Q``, ``R``, ``B``, ``N``,
+            ``P``), lower-case for Black (``k``, ``q``, ``r``, ``b``,
+            ``n``, ``p``).  Squares with no piece are omitted.
+        """
+        result: dict[str, str] = {}
+        for square in chess.SQUARES:
+            piece = self._board.piece_at(square)
+            if piece is not None:
+                result[chess.square_name(square)] = piece.symbol()
+        return result
+
     # ------------------------------------------------------------------
     # Mutation
     # ------------------------------------------------------------------

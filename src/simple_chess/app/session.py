@@ -190,6 +190,11 @@ class GameSession:
               ``None`` if the game is still in progress.
             - ``"legal_moves"`` (``list[str]``): UCI strings of legal moves
               for the current position; empty when the game is over.
+            - ``"board"`` (``dict[str, str]``): mapping of occupied square
+              names (``"a1"``–``"h8"``) to piece symbols (``"K"``,
+              ``"k"``, etc.) as plain Python strings; empty squares are
+              omitted.  Provided by the domain via :meth:`MatchState.board_map`
+              without any ``python-chess`` types in compliance with ADR-004.
         """
         return {
             "turn": self._match.current_turn(),
@@ -198,4 +203,5 @@ class GameSession:
             "is_check": self._match.is_check(),
             "outcome": self._match.outcome(),
             "legal_moves": self._match.legal_move_ucis(),
+            "board": self._match.board_map(),
         }
