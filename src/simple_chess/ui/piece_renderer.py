@@ -10,16 +10,14 @@ directly, in compliance with ADR-004.
 
 Usage example (called from the main window loop after draw_board)::
 
-    from simple_chess.app.session import GameMode, GameSession
-    from simple_chess.domain.match import MatchState
+    from simple_chess.app import LocalGame
     from simple_chess.ui.piece_renderer import draw_pieces, make_piece_font
 
-    match = MatchState()
-    session = GameSession(mode=GameMode.PVP, match=match)
+    local_game = LocalGame.new_pvp()
     font = make_piece_font(size=56)
 
     # Inside the Pygame event loop:
-    state = session.game_state_snapshot()
+    state = local_game.game_state_snapshot()
     draw_pieces(screen, state["board"], font)
 """
 from __future__ import annotations

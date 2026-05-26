@@ -4,10 +4,7 @@ import sys
 
 import pygame
 
-from simple_chess.app.move_processor import MoveProcessor
-from simple_chess.app.session import GameMode, GameSession
-from simple_chess.app.turn_controller import TurnController
-from simple_chess.domain.match import MatchState
+from simple_chess.app import LocalGame
 from simple_chess.ui.board_renderer import draw_board
 from simple_chess.ui.config import FPS, WINDOW_HEIGHT, WINDOW_TITLE, WINDOW_WIDTH
 from simple_chess.ui.input_handler import InputHandler
@@ -113,9 +110,8 @@ def run() -> None:
 
     Mouse click events (MOUSEBUTTONDOWN) are captured, converted to
     algebraic square coordinates via :class:`~simple_chess.ui.input_handler.InputHandler`,
-    and forwarded as UCI move intents to
-    :meth:`~simple_chess.app.turn_controller.TurnController.receive_move_intent`
-    when a two-click sequence is complete.
+    and forwarded as UCI move intents to the Application layer when a
+    two-click sequence is complete.
 
     The UI does **not** validate move legality; that responsibility belongs
     to the domain via the Application layer (ADR-004).
@@ -126,14 +122,10 @@ def run() -> None:
     pygame.display.set_caption(WINDOW_TITLE)
     clock = pygame.time.Clock()
 
-    # --- Application layer setup (M5-04) ---
-    match = MatchState()
-    session = GameSession(mode=GameMode.PVP, match=match)
-    turn_controller = TurnController(session=session)
+    # --- Application layer setup ---
+    local_game = LocalGame.new_pvp()
     input_handler = InputHandler()
 
-    # --- UI/Application integration (M5-05) ---
-    move_processor = MoveProcessor(match=match, controller=turn_controller)
     font = make_piece_font()
     hud_font = pygame.font.Font(None, 24)
     invalid_move_timer = 0
@@ -150,13 +142,12 @@ def run() -> None:
                     mouse_x, mouse_y = event.pos
                     uci = input_handler.handle_click(mouse_x, mouse_y)
                     if uci is not None:
-                        turn_controller.receive_move_intent(uci)
-                        move_applied = move_processor.process_pending_intent()
+                        move_applied = local_game.submit_move_intent(uci)
                         invalid_move_timer = (
                             0 if move_applied else INVALID_MOVE_MESSAGE_FRAMES
                         )
 
-        state = session.game_state_snapshot()
+        state = local_game.game_state_snapshot()
         draw_board(screen, input_handler.selected_square)
         draw_pieces(screen, state["board"], font)
         _draw_hud(screen, hud_font, state, invalid_move_timer)

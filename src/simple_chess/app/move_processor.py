@@ -1,4 +1,4 @@
-"""Move processor for chess game coordination (M4-03).
+"""Move processor for chess game coordination (M4-03, M6-02).
 
 Processes pending movement intents from the :class:`TurnController` by
 delegating validation and application to the domain (:class:`MatchState`).
@@ -6,6 +6,12 @@ delegating validation and application to the domain (:class:`MatchState`).
 The move processor consumes the pending intent stored by
 :class:`TurnController`, validates it via the domain's public interface,
 applies it if legal, and clears the intent regardless of the outcome.
+
+M6-02 adds an explicit Application-layer turn-compatibility gate before
+domain validation: intents incompatible with the current turn are rejected
+early via :meth:`~simple_chess.app.turn_controller.TurnController.is_turn_compatible`,
+keeping the source of truth in the Application/Domain and providing
+an explicit rejection path for wrong-turn intents.
 
 It does not implement chess rules — those belong to the domain.
 It does not import ``python-chess`` (``chess``) directly (ADR-004).
@@ -73,26 +79,44 @@ class MoveProcessor:
     def process_pending_intent(self) -> bool:
         """Validate and apply the pending movement intent, then clear it.
 
-        Reads the pending intent from the :class:`TurnController`, validates
-        it using the domain's public interface
-        (:meth:`~simple_chess.domain.match.MatchState.is_legal_move`), applies
-        it if legal (:meth:`~simple_chess.domain.match.MatchState.push_uci`),
-        and always clears the intent afterwards via
-        :meth:`~simple_chess.app.turn_controller.TurnController.clear_intent`.
+        Reads the pending intent from the :class:`TurnController` and applies
+        two sequential gates before touching the match state:
 
-        Calling :meth:`clear_intent` unconditionally ensures that
+        1. **Turn-compatibility gate** (M6-02): the intent is checked against
+           the current turn via
+           :meth:`~simple_chess.app.turn_controller.TurnController.is_turn_compatible`.
+           Intents from the wrong side are rejected at the Application layer
+           without consulting the domain for full legality.  This is the
+           explicit turn-enforcement contract of M6-02.
+
+        2. **Legality gate**: if the intent is turn-compatible, move legality
+           is validated via the domain's public interface
+           (:meth:`~simple_chess.domain.match.MatchState.is_legal_move`).
+           The domain remains the single source of truth for chess rules
+           (ADR-004).
+
+        The pending intent is always cleared via
+        :meth:`~simple_chess.app.turn_controller.TurnController.clear_intent`
+        regardless of the outcome, ensuring
         :attr:`~simple_chess.app.turn_controller.TurnController.pending_intent`
         is never left in an inconsistent state after processing.
 
         Returns:
-            ``True`` if a pending intent existed, was a legal move, and was
-            applied to the match state.  ``False`` if no intent was pending
-            or the move was illegal — the match state is not modified in
-            either case.
+            ``True`` if a pending intent existed, was turn-compatible, was a
+            legal move, and was applied to the match state.  ``False`` if no
+            intent was pending, the intent was turn-incompatible, or the move
+            was illegal — the match state is not modified in any of these cases.
         """
         uci = self._controller.pending_intent
 
         if uci is None:
+            return False
+
+        # M6-02: explicit Application-layer turn-compatibility gate.
+        # Intents from the wrong side are rejected before domain validation,
+        # keeping the source of truth in the Application/Domain layer.
+        if not self._controller.is_turn_compatible(uci):
+            self._controller.clear_intent()
             return False
 
         is_valid = self._match.is_legal_move(uci)

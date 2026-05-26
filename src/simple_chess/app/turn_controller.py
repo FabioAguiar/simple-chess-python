@@ -1,4 +1,4 @@
-"""Turn controller for chess game coordination (M4-02).
+"""Turn controller for chess game coordination (M4-02, M6-02).
 
 Coordinates turn identification and movement intent reception for the
 application layer.
@@ -7,6 +7,8 @@ The turn controller receives the current game session and is responsible for:
 - Identifying which side and player type is active on the current turn.
 - Accepting a movement intent (UCI string) from the interface layer and
   storing it as pending state for later validation by M4-03.
+- Explicitly checking that a move intent is compatible with the current turn
+  before storing it (M6-02).
 
 It does not validate or apply moves — those responsibilities belong to M4-03.
 It does not call the AI — that belongs to M4-04.
@@ -23,12 +25,14 @@ Example usage::
     session = GameSession(mode=GameMode.PVP, match=match)
     controller = TurnController(session=session)
 
-    controller.current_side()          # "white"
-    controller.current_player_type()   # PlayerType.HUMAN
+    controller.current_side()                  # "white"
+    controller.current_player_type()           # PlayerType.HUMAN
+    controller.is_turn_compatible("e2e4")      # True  (white pawn, white's turn)
+    controller.is_turn_compatible("e7e5")      # False (black pawn, white's turn)
     controller.receive_move_intent("e2e4")
-    controller.pending_intent          # "e2e4"
+    controller.pending_intent                  # "e2e4"
     controller.clear_intent()
-    controller.pending_intent          # None
+    controller.pending_intent                  # None
 """
 from __future__ import annotations
 
@@ -44,12 +48,15 @@ class TurnController:
     Responsibilities:
     - Report which side (white or black) holds the current turn.
     - Report which player type (human or computer) is active.
+    - Explicitly check whether a move intent is compatible with the current
+      turn before accepting it (M6-02).
     - Accept a movement intent (UCI string) from the interface layer and
-      store it as pending state.
+      store it as pending state when turn-compatible.
     - Expose the pending intent for use by M4-03 (validation and application).
 
     Non-responsibilities (explicit scope boundaries):
-    - Does **not** validate moves — delegates to the domain (M4-03).
+    - Does **not** validate full move legality — delegates to the domain
+      (M4-03) via :class:`~simple_chess.app.move_processor.MoveProcessor`.
     - Does **not** apply moves — delegates to the domain (M4-03).
     - Does **not** call the AI — that is M4-04.
     - Does **not** depend on Pygame.
@@ -97,19 +104,62 @@ class TurnController:
     # Movement intent reception
     # ------------------------------------------------------------------
 
+    def is_turn_compatible(self, uci: str) -> bool:
+        """Return whether a move intent is compatible with the current turn.
+
+        Checks whether the piece at the source square named in *uci* belongs
+        to the side currently to move, using only the domain's public
+        interface (:meth:`~simple_chess.domain.match.MatchState.board_map`
+        and :meth:`~simple_chess.domain.match.MatchState.current_turn`).
+        No chess-rule logic is reimplemented here (ADR-004).
+
+        This is the Application layer's explicit turn-compatibility gate
+        (M6-02).  A move that originates from a piece of the wrong colour,
+        from an empty square, or from a syntactically invalid source square
+        is considered turn-incompatible and will not be stored by
+        :meth:`receive_move_intent`.
+
+        Args:
+            uci: A candidate move string in UCI notation.  Only the first
+                two characters (source square) are inspected.
+
+        Returns:
+            ``True`` if the piece at the source square belongs to the side
+            currently to move according to the domain.
+            ``False`` if the UCI string is shorter than two characters, no
+            piece occupies the source square, or the piece belongs to the
+            opposing side.
+        """
+        if len(uci) < 2:  # noqa: PLR2004
+            return False
+        source_square = uci[:2]
+        board = self._session.match.board_map()
+        piece = board.get(source_square)
+        if piece is None:
+            return False
+        current = self._session.match.current_turn()
+        # Uppercase symbols are White pieces; lowercase are Black (ADR-004,
+        # board_map contract).  White pieces are valid only on white's turn
+        # and vice-versa.
+        return (current == "white") == piece.isupper()
+
     def receive_move_intent(self, uci: str) -> None:
-        """Accept and store a movement intent from the interface layer.
+        """Accept and store a movement intent if compatible with the current turn.
 
-        Stores the UCI string as pending state so that M4-03 can later
-        validate and apply it via the domain.  Does not validate the move.
+        Explicitly checks turn compatibility via :meth:`is_turn_compatible`
+        before storing the intent.  Intents from the wrong side are silently
+        rejected — the pending intent is not modified when the source piece
+        does not belong to the current player (M6-02).
 
-        The intent is stored as-is; format validation (UCI syntax) is not
-        performed here.  Validation of move legality belongs to M4-03.
+        Full move-legality validation (path, pins, check constraints) is
+        still delegated to the domain via
+        :class:`~simple_chess.app.move_processor.MoveProcessor` (M4-03).
 
         Args:
             uci: A movement string in UCI notation (e.g. ``"e2e4"``).
         """
-        self._pending_intent = uci
+        if self.is_turn_compatible(uci):
+            self._pending_intent = uci
 
     @property
     def pending_intent(self) -> str | None:
