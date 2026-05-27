@@ -15,26 +15,28 @@
     "formal_issue_json_pattern": "issues/{milestone_id}/{issue_id}/formal-issue.json",
     "formal_issue_markdown_pattern": "issues/{milestone_id}/{issue_id}/issue.md",
     "github_role": "publication_target_or_human_reference"
-  }, 
+  },
   "current_milestone": {
-    "id": "M6",
-    "title": "Modo PvP local jog√°vel",
+    "id": "M7",
+    "title": "IA aleat¢ria isolada",
     "status": "active"
   },
-  "last_completed_milestone": "M5",
+  "last_completed_milestone": "M6",
   "completed_milestones": [
     "M1",
     "M2",
     "M3",
     "M4",
-    "M5"
+    "M5",
+    "M6"
   ],
   "locked_completed_milestones": [
     "M1",
     "M2",
     "M3",
     "M4",
-    "M5"
+    "M5",
+    "M6"
   ],
   "reopen_records": [],
   "regression_policy": {
@@ -66,7 +68,10 @@
     "M4 is locked to prevent implicit regression without an explicit reopen record.",
     "M5 is marked as completed because the initial local Pygame interface, board rendering, piece rendering, mouse interaction foundation, and UI/application integration points were prepared for continuation.",
     "M5 is locked to prevent implicit regression without an explicit reopen record.",
-    "M6 is the current active milestone and should be validated against docs/milestones.md before workflow continuation.",
+    "M6 is marked as completed because the local PvP flow, turn alternation, board state updates, captures, and PvP validation were prepared and validated for continuation.",
+    "M6 is locked to prevent implicit regression without an explicit reopen record.",
+    "M7 is the current active milestone and should be validated against docs/milestones.md before workflow continuation.",
+    "Formal issues are resolved from the support workspace using formal_issue_location patterns; GitHub is only a publication target or human reference.",
     "docs/milestones.md remains the planning document and must not be treated as the operational cursor.",
     "docs/architecture.md may define the implementation documentation strategy; this file only records milestone state.",
     "Issues, handoffs, workflows, and scripts may use this state as input for validation, but must not infer authorization to implement from this file alone.",
