@@ -27,6 +27,15 @@ class LocalGame:
         self._move_processor = move_processor
 
     @classmethod
+    def new(cls, mode: GameMode = GameMode.PVP) -> "LocalGame":
+        """Create a local game for the selected mode."""
+        if mode == GameMode.PVP:
+            return cls.new_pvp()
+        if mode == GameMode.PVC:
+            return cls.new_pvc()
+        raise ValueError(f"Unsupported game mode: {mode!r}")
+
+    @classmethod
     def new_pvp(cls) -> "LocalGame":
         """Create a local player-vs-player game for two human players."""
         match = MatchState()
