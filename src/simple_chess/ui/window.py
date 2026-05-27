@@ -245,8 +245,8 @@ def run() -> None:
                     if uci is not None:
                         if local_game is None:
                             continue
-                        move_applied, state = local_game.submit_move_intent_with_snapshot(
-                            uci
+                        move_applied, state = (
+                            local_game.submit_human_move_intent_with_snapshot(uci)
                         )
                         invalid_move_timer = (
                             0 if move_applied else INVALID_MOVE_MESSAGE_FRAMES

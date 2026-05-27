@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
+from simple_chess.ai import choose_random_move
 from simple_chess.app.move_processor import MoveProcessor
 from simple_chess.app.session import GameMode, GameSession
 from simple_chess.app.turn_controller import TurnController
@@ -85,6 +86,44 @@ class LocalGame:
         """
         move_applied = self.submit_move_intent(uci)
         return move_applied, self.game_state_snapshot()
+
+    def submit_human_move_intent_with_snapshot(
+        self,
+        uci: str,
+        ai_fn: Callable[[list[str]], str] = choose_random_move,
+    ) -> tuple[bool, dict[str, object]]:
+        """Apply a human move and continue the PvC turn when appropriate.
+
+        The human move is always processed first through the same
+        Application/Domain path used by regular move intents.  Only after a
+        valid human move updates domain state does the application inspect
+        the refreshed turn.  If the session is PvC, the game is still active,
+        and the refreshed turn belongs to the computer, the AI is asked for a
+        candidate move and that move is applied through the domain as well.
+
+        Args:
+            uci: Human move intent in UCI notation.
+            ai_fn: AI selector callable.  Defaults to the random strategy.
+
+        Returns:
+            A tuple with whether the human move was applied and the game
+            snapshot after any eligible AI response.
+        """
+        human_move_applied = self.submit_move_intent(uci)
+
+        if human_move_applied and self._should_request_ai_move():
+            self.request_and_apply_ai_move(ai_fn)
+
+        return human_move_applied, self.game_state_snapshot()
+
+    def _should_request_ai_move(self) -> bool:
+        """Return whether the app should request a PvC AI response now."""
+        return (
+            self._session.mode == GameMode.PVC
+            and self._session.is_computer_turn()
+            and not self._session.match.is_game_over()
+            and bool(self._session.match.legal_move_ucis())
+        )
 
     def request_and_apply_ai_move(
         self, ai_fn: Callable[[list[str]], str]
