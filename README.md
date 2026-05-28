@@ -209,6 +209,28 @@ Além de funcionar como um jogo de xadrez, este projeto também registra um expe
 
 ---
 
+## Autoavaliação técnica
+
+Antes do início da implementação, foi decidido arquiteturalmente o uso da biblioteca `python-chess` como fonte principal para regras, estado da partida, movimentos legais, aplicação de jogadas e detecção de estados do jogo. Essa decisão foi tomada para evitar a implementação manual das regras completas do xadrez e para manter a biblioteca encapsulada na camada de domínio, conforme a separação planejada entre domínio, aplicação, IA e interface.
+
+Apesar dessa decisão arquitetural prévia, a implementação assistida por IA manteve algumas validações auxiliares na camada de aplicação, especialmente relacionadas à compatibilidade entre a peça selecionada e o turno atual. Essas validações não substituem o `python-chess`, mas criam uma camada defensiva adicional antes da validação real feita pelo domínio.
+
+Do ponto de vista funcional, essa redundância não impede o funcionamento do jogo. No entanto, do ponto de vista de qualidade de código, ela representa um ponto de melhoria: parte dessas verificações poderia ser simplificada ou removida, deixando o `python-chess` como autoridade única para decidir se uma jogada é legal ou ilegal.
+
+Um exemplo disso é a validação manual de que a peça de origem pertence ao jogador da vez. Embora essa checagem possa ajudar no fluxo da aplicação e no feedback inicial ao usuário, o próprio `python-chess` já rejeitaria movimentos incompatíveis com o turno atual ao consultar os movimentos legais disponíveis.
+
+Como melhoria futura, o projeto pode:
+
+- reduzir validações manuais que duplicam decisões já cobertas por `python-chess`;
+- manter na camada de aplicação apenas validações de fluxo, modo de jogo e interação do usuário;
+- concentrar a legalidade dos movimentos no domínio;
+- revisar nomes de métodos para diferenciar melhor validação de regra de xadrez e validação de fluxo da aplicação;
+- simplificar o processamento de jogadas usando um método único de tentativa de aplicação, como `try_push_uci`.
+
+Essa observação não invalida a implementação atual. Pelo contrário, ela registra um aprendizado importante do experimento: mesmo com documentação, issues formais e validação incremental, a implementação assistida por IA pode introduzir camadas defensivas ou redundantes. Identificar e documentar essas ocorrências faz parte do objetivo do projeto como estudo prático de desenvolvimento incremental com apoio de IA.
+
+---
+
 ## Licença
 
 Este projeto está licenciado sob os termos da MIT License.
