@@ -22,7 +22,6 @@ Rationale:
 """
 from __future__ import annotations
 
-import pytest
 
 from simple_chess.app.local_game import LocalGame
 from simple_chess.app.session import GameMode, GameSession, PlayerType
