@@ -195,6 +195,13 @@ class GameSession:
               ``"k"``, etc.) as plain Python strings; empty squares are
               omitted.  Provided by the domain via :meth:`MatchState.board_map`
               without any ``python-chess`` types in compliance with ADR-004.
+            - ``"last_move"`` (``str | None``): UCI string of the most
+              recently applied move (e.g. ``"e7e5"``), or ``None`` if no
+              move has been made yet.  Provided by the domain via
+              :meth:`MatchState.last_move_uci` without any ``python-chess``
+              types, in compliance with ADR-004.  Intended to allow the
+              interface layer to display the last move (e.g. the AI's move
+              in PvC mode) without coupling to the AI layer directly.
         """
         return {
             "turn": self._match.current_turn(),
@@ -204,4 +211,5 @@ class GameSession:
             "outcome": self._match.outcome(),
             "legal_moves": self._match.legal_move_ucis(),
             "board": self._match.board_map(),
+            "last_move": self._match.last_move_uci(),
         }

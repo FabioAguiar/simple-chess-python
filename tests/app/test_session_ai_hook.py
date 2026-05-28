@@ -186,7 +186,8 @@ class TestGameStateSnapshot:
             "is_check",
             "outcome",
             "legal_moves",
-            "board"
+            "board",
+            "last_move"
         }
 
     def test_turn_is_white_at_start(

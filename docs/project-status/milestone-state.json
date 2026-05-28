@@ -17,11 +17,11 @@
     "github_role": "publication_target_or_human_reference"
   },
   "current_milestone": {
-    "id": "M8",
-    "title": "Modo PvC local",
+    "id": "M9",
+    "title": "Testes, validação e aderência arquitetural",
     "status": "active"
   },
-  "last_completed_milestone": "M7",
+  "last_completed_milestone": "M8",
   "completed_milestones": [
     "M1",
     "M2",
@@ -29,7 +29,8 @@
     "M4",
     "M5",
     "M6",
-    "M7"
+    "M7",
+    "M8"
   ],
   "locked_completed_milestones": [
     "M1",
@@ -38,7 +39,8 @@
     "M4",
     "M5",
     "M6",
-    "M7"
+    "M7",
+    "M8"
   ],
   "reopen_records": [],
   "regression_policy": {
@@ -74,7 +76,9 @@
     "M6 is locked to prevent implicit regression without an explicit reopen record.",
     "M7 is marked as completed because the isolated random AI strategy was prepared to choose legal moves without directly altering game state.",
     "M7 is locked to prevent implicit regression without an explicit reopen record.",
-    "M8 is the current active milestone and should be validated against docs/milestones.md before workflow continuation.",
+    "M8 is marked as completed because the local PvC flow was prepared to allow the human player to play as white against the random AI as black.",
+    "M8 is locked to prevent implicit regression without an explicit reopen record.",
+    "M9 is the current active milestone and should be validated against docs/milestones.md before workflow continuation.",
     "Formal issues are resolved from the support workspace using formal_issue_location patterns; GitHub is only a publication target or human reference.",
     "docs/milestones.md remains the planning document and must not be treated as the operational cursor.",
     "docs/architecture.md may define the implementation documentation strategy; this file only records milestone state.",

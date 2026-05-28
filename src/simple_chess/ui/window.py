@@ -125,6 +125,9 @@ def _draw_hud(
     invalid_move_timer: int,
 ) -> None:
     lines = [_format_mode(state.get("mode")), _format_turn(state.get("turn"))]
+    last_move = state.get("last_move")
+    if state.get("mode") == "pvc" and state.get("turn") == "white" and last_move:
+        lines.append(f"IA: {last_move}")
     status_message = _status_message(state, invalid_move_timer)
     if status_message is not None:
         lines.append(status_message)

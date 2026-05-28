@@ -138,6 +138,17 @@ class MatchState:
                 result[chess.square_name(square)] = piece.symbol()
         return result
 
+    def last_move_uci(self) -> str | None:
+        """Return the UCI string of the last applied move, or ``None``.
+
+        Returns:
+            The UCI string of the most recently applied move (e.g.
+            ``"e7e5"``), or ``None`` if no move has been applied yet.
+        """
+        if self._board.move_stack:
+            return self._board.peek().uci()
+        return None
+
     # ------------------------------------------------------------------
     # Mutation
     # ------------------------------------------------------------------
